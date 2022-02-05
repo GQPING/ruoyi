@@ -52,7 +52,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="yearList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="yearList" @selection-change="handleSelectionChange" border>
       <el-table-column type="selection" width="55" align="center" />
       <af-table-column
         label="序号"
