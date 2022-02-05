@@ -56,7 +56,7 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 日度账单
      */
     @Override
-    @DataScope(deptAlias = "d", userAlias = "d")
+    @DataScope(deptAlias = "", userAlias = "d")
     public List<BillDayVO> selectBillDayList(QueryBillDay billDay)
     {
         return billDayMapper.selectBillDayList(billDay);

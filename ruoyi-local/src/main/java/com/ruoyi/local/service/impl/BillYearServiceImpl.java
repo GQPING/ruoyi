@@ -44,7 +44,7 @@ public class BillYearServiceImpl implements IBillYearService
      * @return 年度账单
      */
     @Override
-    @DataScope(deptAlias = "y", userAlias = "y")
+    @DataScope(deptAlias = "", userAlias = "y")
     public List<BillYearVO> selectBillYearList(QueryBillYear billYear)
     {
         return billYearMapper.selectBillYearList(billYear);

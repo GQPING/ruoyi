@@ -44,7 +44,7 @@ public class BillMonthServiceImpl implements IBillMonthService
      * @return 月度账单
      */
     @Override
-    @DataScope(deptAlias = "m", userAlias = "m")
+    @DataScope(deptAlias = "", userAlias = "m")
     public List<BillMonthVO> selectBillMonthList(QueryBillMonth billMonth)
     {
         return billMonthMapper.selectBillMonthList(billMonth);
