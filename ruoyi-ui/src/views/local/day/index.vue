@@ -6,18 +6,21 @@
           v-model="queryParams.text"
           placeholder="请输入账单描述"
           clearable
-          style="width: 140px"
+          size="small"
+          style="width: 200px"
           suffix-icon="el-icon-search"
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item label="账单日期" prop="date">
-        <el-input
+        <el-date-picker
           v-model="queryParams.date"
           placeholder="请选择账单日期"
           clearable
           size="small"
-          @keyup.enter.native="handleQuery"
+          type="date"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
           :picker-options="pickerOptions_expireTime"
         />
       </el-form-item>
@@ -170,11 +173,13 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="账单日期" prop="date">
-          <el-input
+          <el-date-picker
             v-model="form.date"
             placeholder="请选择账单日期"
             clearable
-            size="small"
+            type="date"
+            format="yyyy-MM-dd"
+            value-format="yyyy-MM-dd"
             :picker-options="pickerOptions_expireTime"
           />
         </el-form-item>
@@ -212,7 +217,12 @@
           </el-select>
         </el-form-item>
         <el-form-item label="账单描述" prop="details">
-          <el-input v-model="form.details" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.details"
+                    type="textarea"
+                    placeholder="请输入账单描述"
+                    maxlength="30"
+                    rows="5"
+                    show-word-limit/>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -382,3 +392,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  ::v-deep .el-date-editor.el-input {
+    width:100%;
+  }
+  ::v-deep .el-select {
+    width: 100%;
+  }
+</style>
