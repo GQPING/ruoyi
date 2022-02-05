@@ -3,6 +3,7 @@ package com.ruoyi.common.utils;
 import java.lang.management.ManagementFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -16,6 +17,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     public static String YYYY = "yyyy";
 
     public static String YYYY_MM = "yyyy-MM";
+
+    public static String YYYYMMDD = "yyyyMMdd";
 
     public static String YYYY_MM_DD = "yyyy-MM-dd";
 
@@ -46,6 +49,26 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
     public static String getDate()
     {
         return dateTimeNow(YYYY_MM_DD);
+    }
+
+    /**
+     * 获取当前年, 默认格式为yyyy
+     *
+     * @return String
+     */
+    public static String getNowYear()
+    {
+        return dateTimeNow(YYYY);
+    }
+
+    /**
+     * 获取当前日期, 默认格式为yyyyMMdd
+     *
+     * @return String
+     */
+    public static String getDateNow()
+    {
+        return dateTimeNow(YYYYMMDD);
     }
 
     public static final String getTime()
@@ -151,5 +174,47 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         // 计算差多少秒//输出结果
         // long sec = diff % nd % nh % nm / ns;
         return day + "天" + hour + "小时" + min + "分钟";
+    }
+
+    /**
+     * 获取指定日期的上一年 格式默认：yyyy
+     */
+    public static String getLastYear(Date date,String format){
+        if(StringUtils.isEmpty(format)){
+            format = YYYY;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        //年份减一
+        cal.add(Calendar.YEAR,-1);
+        return parseDateToStr(format,cal.getTime());
+    }
+
+    /**
+     * 获取指定日期的上一月 格式默认：yyyy-MM
+     */
+    public static String getLastMonth(Date date,String format){
+        if(StringUtils.isEmpty(format)){
+            format = YYYY_MM;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        //月份减一
+        cal.add(Calendar.MONTH,-1);
+        return parseDateToStr(format,cal.getTime());
+    }
+
+    /**
+     * 获取指定日期的上一日 格式默认：yyyy-MM-dd
+     */
+    public static String getLastDate(Date date,String format){
+        if(StringUtils.isEmpty(format)){
+            format = YYYY_MM_DD;
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        //日期减一,24小时制
+        cal.add(Calendar.HOUR_OF_DAY,-24);
+        return parseDateToStr(format,cal.getTime());
     }
 }

@@ -1,29 +1,27 @@
 package com.ruoyi.local.domain;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 日度账单对象 jz_bill_day
+ * 月度账单对象 jz_bill_month
  * 
  * @author local
- * @date 2022-02-05
+ * @date 2022-02-06
  */
-public class BillDay extends BaseEntity
+public class BillMonth extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
     /** 主键 */
     private String id;
 
-    /** 账单日期 */
-    @Excel(name = "账单日期")
-    private String date;
+    /** 账单月份 */
+    @Excel(name = "账单月份")
+    private String month;
 
     /** 账单金额 */
     @Excel(name = "账单金额")
@@ -32,18 +30,6 @@ public class BillDay extends BaseEntity
     /** 账单类型 */
     @Excel(name = "账单类型")
     private String type;
-
-    /** 支付方式 */
-    @Excel(name = "支付方式")
-    private String payWay;
-
-    /** 支付类型 */
-    @Excel(name = "支付类型")
-    private String payType;
-
-    /** 账单描述 */
-    @Excel(name = "账单描述")
-    private String details;
 
     /** 所属用户 */
     @Excel(name = "所属用户")
@@ -58,14 +44,14 @@ public class BillDay extends BaseEntity
     {
         return id;
     }
-    public void setDate(String date) 
+    public void setMonth(String month) 
     {
-        this.date = date;
+        this.month = month;
     }
 
-    public String getDate() 
+    public String getMonth() 
     {
-        return date;
+        return month;
     }
     public void setMoney(BigDecimal money) 
     {
@@ -85,33 +71,6 @@ public class BillDay extends BaseEntity
     {
         return type;
     }
-    public void setPayWay(String payWay) 
-    {
-        this.payWay = payWay;
-    }
-
-    public String getPayWay() 
-    {
-        return payWay;
-    }
-    public void setPayType(String payType) 
-    {
-        this.payType = payType;
-    }
-
-    public String getPayType() 
-    {
-        return payType;
-    }
-    public void setDetails(String details) 
-    {
-        this.details = details;
-    }
-
-    public String getDetails() 
-    {
-        return details;
-    }
     public void setUserId(String userId) 
     {
         this.userId = userId;
@@ -126,13 +85,11 @@ public class BillDay extends BaseEntity
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
-            .append("date", getDate())
+            .append("month", getMonth())
             .append("money", getMoney())
             .append("type", getType())
-            .append("payWay", getPayWay())
-            .append("payType", getPayType())
-            .append("details", getDetails())
             .append("userId", getUserId())
+            .append("createTime", getCreateTime())
             .toString();
     }
 }

@@ -60,4 +60,13 @@ public interface IBillDayService
      * @return 结果
      */
     int deleteBillDayById(String id);
+
+    /**
+     * 月度年度定时任务
+     *
+     * @param date 时间字符串
+     * @param yearOrMonth 按照年份还是月份
+     * @return 结果
+     */
+    void autoJobExecute(String date, String yearOrMonth);
 }

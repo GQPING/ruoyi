@@ -5,6 +5,7 @@ import com.ruoyi.local.domain.BillDay;
 import com.ruoyi.local.domain.query.QueryBillDay;
 import com.ruoyi.local.domain.viewObject.BillDayVO;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 日度账单Mapper接口
@@ -62,4 +63,13 @@ public interface BillDayMapper
      * @return 结果
      */
     int deleteBillDayByIds(String[] ids);
+
+    /**
+     * 月度年度定时任务
+     *
+     * @param date 时间字符串
+     * @param yearOrMonth 按照年份还是月份
+     * @return 日度账单集合
+     */
+    List<BillDay> autoJobExecute(@Param("date") String date, @Param("yearOrMonth") String yearOrMonth);
 }

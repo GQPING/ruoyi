@@ -1,18 +1,22 @@
 package com.ruoyi.local.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
-import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.constant.DictConstant;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
+import com.ruoyi.local.domain.BillMonth;
+import com.ruoyi.local.domain.BillYear;
 import com.ruoyi.local.domain.query.QueryBillDay;
 import com.ruoyi.local.domain.viewObject.BillDayVO;
+import com.ruoyi.local.service.IBillMonthService;
+import com.ruoyi.local.service.IBillYearService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.local.mapper.BillDayMapper;
 import com.ruoyi.local.domain.BillDay;
 import com.ruoyi.local.service.IBillDayService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 日度账单Service业务层处理
@@ -25,6 +29,12 @@ public class BillDayServiceImpl implements IBillDayService
 {
     @Autowired
     private BillDayMapper billDayMapper;
+
+    @Autowired
+    private IBillMonthService billMonthService;
+
+    @Autowired
+    private IBillYearService billYearService;
 
     /**
      * 查询日度账单
@@ -57,6 +67,7 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int insertBillDay(BillDay billDay)
     {
         String uuid = IdUtils.fastSimpleUUID();
@@ -73,6 +84,7 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int updateBillDay(BillDay billDay)
     {
         return billDayMapper.updateBillDay(billDay);
@@ -85,6 +97,7 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteBillDayByIds(String[] ids)
     {
         return billDayMapper.deleteBillDayByIds(ids);
@@ -97,8 +110,43 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 结果
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public int deleteBillDayById(String id)
     {
         return billDayMapper.deleteBillDayById(id);
+    }
+
+    /**
+     * 月度年度定时任务
+     *
+     * @param date 时间字符串
+     * @param yearOrMonth 按照年份还是月份
+     * @return 结果
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void autoJobExecute(String date, String yearOrMonth) {
+        List<BillDay> list = billDayMapper.autoJobExecute(date, yearOrMonth);
+        if (list != null && !list.isEmpty()) {
+            if (DictConstant.CHECKING_TYPE_01.equals(yearOrMonth)) {
+                for(BillDay day : list){
+                    BillMonth billMonth = new BillMonth();
+                    billMonth.setMonth(date);
+                    billMonth.setUserId(day.getUserId());
+                    billMonth.setType(day.getType());
+                    billMonth.setMoney(day.getMoney());
+                    billMonthService.insertBillMonth(billMonth);
+                }
+            } else if (DictConstant.CHECKING_TYPE_02.equals(yearOrMonth)) {
+                for(BillDay day : list){
+                    BillYear billYear = new BillYear();
+                    billYear.setYear(date);
+                    billYear.setUserId(day.getUserId());
+                    billYear.setType(day.getType());
+                    billYear.setMoney(day.getMoney());
+                    billYearService.insertBillYear(billYear);
+                }
+            }
+        }
     }
 }

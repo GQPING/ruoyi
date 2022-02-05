@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.local.mapper.BillYearMapper">
+    
+    <resultMap type="com.ruoyi.local.domain.viewObject.BillYearVO" id="BillYearResult">
+        <result property="id"    column="id"    />
+        <result property="year"    column="year"    />
+        <result property="money"    column="money"    />
+        <result property="type"    column="type"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createTime"    column="create_time"    />
+    </resultMap>
+
+    <sql id="selectBillYearVo">
+        select id, year, money, type, user_id, create_time from jz_bill_year
+    </sql>
+
+    <select id="selectBillYearList" parameterType="com.ruoyi.local.domain.query.QueryBillYear" resultMap="BillYearResult">
+        <include refid="selectBillYearVo"/>
+        <where>  
+            <if test="year != null  and year != ''"> and year = #{year}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+        </where>
+    </select>
+    
+    <select id="selectBillYearById" parameterType="String" resultMap="BillYearResult">
+        <include refid="selectBillYearVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBillYear" parameterType="com.ruoyi.local.domain.BillYear">
+        insert into jz_bill_year
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="year != null">year,</if>
+            <if test="money != null">money,</if>
+            <if test="type != null">type,</if>
+            <if test="userId != null">user_id,</if>
+            create_time
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="year != null">#{year},</if>
+            <if test="money != null">#{money},</if>
+            <if test="type != null">#{type},</if>
+            <if test="userId != null">#{userId},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateBillYear" parameterType="com.ruoyi.local.domain.BillYear">
+        update jz_bill_year
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="year != null">year = #{year},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBillYearById" parameterType="String">
+        delete from jz_bill_year where id = #{id}
+    </delete>
+
+    <delete id="deleteBillYearByIds" parameterType="String">
+        delete from jz_bill_year where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

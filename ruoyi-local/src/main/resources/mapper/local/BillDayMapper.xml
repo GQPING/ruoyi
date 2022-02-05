@@ -30,6 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payType != null  and payType != ''"> and pay_type = #{payType}</if>
             <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
         </where>
+        order by create_time desc
     </select>
 
     <select id="selectBillDayById" parameterType="String" resultMap="BillDayResult">
@@ -88,4 +89,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             #{id}
         </foreach>
     </delete>
+
+    <select id="autoJobExecute" parameterType="String" resultType="com.ruoyi.local.domain.BillDay">
+        select d.user_id as userId,
+               d.type,
+               ifnull(format(sum(d.money),2),0) as money
+        from jz_bill_day d
+        <where>
+            <if test='yearOrMonth == "01"'>
+                and left(trim(d.date).7) = #{date}
+            </if>
+            <if test='yearOrMonth == "02"'>
+                and left(trim(d.date),4) = #{date}
+            </if>
+        </where>
+        group by d.user_id, d.type
+    </select>
+
 </mapper>
