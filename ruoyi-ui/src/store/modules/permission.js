@@ -46,11 +46,13 @@ const permission = {
           const asyncRoutes = filterDynamicRoutes(dynamicRoutes);
           rewriteRoutes.push({ path: '*', redirect: '/404', hidden: true })
           router.addRoutes(asyncRoutes);
-          commit('SET_ROUTES', rewriteRoutes)
+          // commit('SET_ROUTES', rewriteRoutes) //面包屑导航，只到2级目录
+          commit('SET_ROUTES', sidebarRoutes)
           commit('SET_SIDEBAR_ROUTERS', constantRoutes.concat(sidebarRoutes))
           commit('SET_DEFAULT_ROUTES', sidebarRoutes)
           commit('SET_TOPBAR_ROUTES', sidebarRoutes)
-          resolve(rewriteRoutes)
+          // resolve(rewriteRoutes)  //面包屑导航，只到2级目录
+          resolve(sidebarRoutes)
         })
       })
     }

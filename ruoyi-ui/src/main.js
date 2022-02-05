@@ -19,6 +19,12 @@ import './permission' // permission control
 import { getDicts } from "@/api/system/dict/data";
 import { getConfigKey } from "@/api/system/config";
 import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, handleTree } from "@/utils/ruoyi";
+
+// 全局修改默认配置，点击空白处不能关闭弹窗
+// Element.Dialog.props.closeOnClickModal.default = false
+// 全局修改element默认配置
+Element.TableColumn.props.showOverflowTooltip = { type: Boolean, default: true }
+
 // 分页组件
 import Pagination from "@/components/Pagination";
 // 自定义表格工具组件
@@ -62,6 +68,57 @@ Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
 DictData.install()
+
+// 百度地图插件
+import VueAMap from 'vue-amap'
+Vue.use(VueAMap)
+VueAMap.initAMapApiLoader({
+  key: '485b10bb92fe21c2750391e35774c18b',
+  plugin: [
+    "AMap.Autocomplete", // 输入提示插件
+    "AMap.PlaceSearch", // POI搜索插件
+    "AMap.Scale", // 右下角缩略图插件 比例尺
+    "AMap.OverView", // 地图鹰眼插件
+    "AMap.ToolBar", // 地图工具条
+    "AMap.MapType", // 类别切换控件，实现默认图层与卫星图、实施交通图层之间切换的控制
+    "AMap.PolyEditor", // 编辑 折线多，边形
+    "AMap.CircleEditor", // 圆形编辑器插件
+    "AMap.Geolocation", // 定位控件，用来获取和展示用户主机所在的经纬度位置,
+    "AMap.Geocoder"
+  ],
+  v: '1.4.4'
+});
+
+// 自适应表格插件
+import AFTableColumn from 'af-table-column'
+Vue.use(AFTableColumn)
+
+// 根据银行账号查询所属银行插件
+import getBankcardinfo from 'bankcardinfo'
+Vue.prototype.$getBankcardinfo = getBankcardinfo
+
+// mathjs精确计算插件
+import * as math from 'mathjs'
+Vue.prototype.$math = math
+
+// 时间格式化组件
+import moment from 'moment'
+Vue.prototype.$moment = moment;
+
+// 成功提示
+Vue.prototype.msgSuccess = function (msg) {
+  this.$message({ showClose: true, message: msg, type: "success" })
+}
+
+// 错误提示
+Vue.prototype.msgError = function (msg) {
+  this.$message({ showClose: true, message: msg, type: "error" })
+}
+
+// 信息提示
+Vue.prototype.msgInfo = function (msg) {
+  this.$message.info(msg)
+}
 
 /**
  * If you don't want to use mock-server
