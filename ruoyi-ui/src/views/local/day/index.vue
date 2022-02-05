@@ -106,7 +106,7 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="dayList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="dayList" @selection-change="handleSelectionChange" border>
       <el-table-column type="selection" width="55" align="center" />
       <af-table-column
         label="序号"
@@ -117,31 +117,31 @@
           <span>{{ (queryParams.pageNum-1) * queryParams.pageSize + scope.$index +1 }}</span>
         </template>
       </af-table-column>
-      <af-table-column label="账单日期" align="center" prop="date" />
-      <af-table-column label="账单金额" align="center" prop="money" />
-      <af-table-column label="账单类型" align="center" prop="type">
+      <af-table-column label="账单日期" width="106" align="center" prop="date" />
+      <af-table-column label="账单金额" width="106" align="center" prop="money" />
+      <af-table-column label="账单类型" width="80" align="center" prop="type">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.BillType" :value="scope.row.type"/>
         </template>
       </af-table-column>
-      <af-table-column label="支付方式" align="center" prop="payWay">
+      <af-table-column label="支付方式" width="97" align="center" prop="payWay">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.PayWay" :value="scope.row.payWay"/>
         </template>
       </af-table-column>
-      <af-table-column label="支付类型" align="center" prop="payType">
+      <af-table-column label="支付类型" width="106" align="center" prop="payType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.PayType" :value="scope.row.payType"/>
         </template>
       </af-table-column>
       <af-table-column label="账单描述" align="center" prop="details" />
       <af-table-column label="所属用户" align="center" prop="userId" />
-      <el-table-column label="创建时间" align="center" prop="createdTime" width="180">
+      <el-table-column label="创建时间" width="182" align="center" prop="createTime">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.createdTime, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作" width="130" fixed="right" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -317,7 +317,7 @@ export default {
         payType: null,
         details: null,
         userId: null,
-        createdTime: null
+        createTime: null
       };
       this.resetForm("form");
     },
