@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.local.domain.query.QueryBillDay;
 import com.ruoyi.local.domain.viewObject.BillDayVO;
@@ -60,8 +61,8 @@ public class BillDayServiceImpl implements IBillDayService
     {
         String uuid = IdUtils.fastSimpleUUID();
         billDay.setId(uuid);
-        Date nowDate = DateUtils.getNowDate();
-        billDay.setCreateTime(nowDate);
+        String userName = SecurityUtils.getUsername();
+        billDay.setUserId(userName);
         return billDayMapper.insertBillDay(billDay);
     }
 

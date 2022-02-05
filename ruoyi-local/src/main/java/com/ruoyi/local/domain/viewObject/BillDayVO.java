@@ -5,6 +5,7 @@ import com.ruoyi.common.annotation.Excel;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -14,8 +15,10 @@ import java.util.Date;
  * @author cxw
  * @date 2022/2/5
  */
-public class BillDayVO
-{
+public class BillDayVO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /** 主键 */
     private String id;
 
@@ -51,7 +54,7 @@ public class BillDayVO
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date createdTime;
+    private Date createTime;
 
     public void setId(String id)
     {
@@ -125,14 +128,14 @@ public class BillDayVO
     {
         return userId;
     }
-    public void setCreatedTime(Date createdTime)
+    public void setCreateTime(Date createTime)
     {
-        this.createdTime = createdTime;
+        this.createTime = createTime;
     }
 
-    public Date getCreatedTime()
+    public Date getCreateTime()
     {
-        return createdTime;
+        return createTime;
     }
 
     @Override
@@ -146,7 +149,7 @@ public class BillDayVO
                 .append("payType", getPayType())
                 .append("details", getDetails())
                 .append("userId", getUserId())
-                .append("createdTime", getCreatedTime())
+                .append("createTime", getCreateTime())
                 .toString();
     }
 }

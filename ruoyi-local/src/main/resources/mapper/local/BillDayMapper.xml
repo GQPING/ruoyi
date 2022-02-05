@@ -13,11 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="payType"    column="pay_type"    />
         <result property="details"    column="details"    />
         <result property="userId"    column="user_id"    />
-        <result property="createdTime"    column="created_time"    />
+        <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectBillDayVo">
-        select id, date, money, type, pay_way, pay_type, details, user_id, created_time from jz_bill_day
+        select id, date, money, type, pay_way, pay_type, details, user_id, create_time from jz_bill_day
     </sql>
 
     <select id="selectBillDayList" parameterType="com.ruoyi.local.domain.query.QueryBillDay" resultMap="BillDayResult">
@@ -48,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payType != null">pay_type,</if>
             <if test="details != null">details,</if>
             <if test="userId != null">user_id,</if>
-            <if test="createdTime != null">created_time,</if>
+            create_time
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -59,7 +59,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payType != null">#{payType},</if>
             <if test="details != null">#{details},</if>
             <if test="userId != null">#{userId},</if>
-            <if test="createdTime != null">#{createdTime},</if>
+            sysdate()
          </trim>
     </insert>
 
@@ -73,7 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="payType != null">pay_type = #{payType},</if>
             <if test="details != null">details = #{details},</if>
             <if test="userId != null">user_id = #{userId},</if>
-            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
         </trim>
         where id = #{id}
     </update>
