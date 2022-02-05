@@ -129,9 +129,12 @@
 }
 
 .el-table .fixed-width .el-button--mini {
-	padding-left: 0;
-	padding-right: 0;
-	width: inherit;
+	//padding-left: 0;
+	//padding-right: 0;
+	//width: inherit;
+  padding-left: 3px;
+  padding-right: 3px;
+  width: auto;
 }
 
 /** 表格更多操作下拉样式 */
