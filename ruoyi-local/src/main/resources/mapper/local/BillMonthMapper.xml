@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="type != null  and type != ''"> and type = #{type}</if>
             <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
         </where>
+        order by create_time desc
     </select>
     
     <select id="selectBillMonthById" parameterType="String" resultMap="BillMonthResult">

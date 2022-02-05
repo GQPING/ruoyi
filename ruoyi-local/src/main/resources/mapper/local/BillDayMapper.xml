@@ -97,7 +97,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from jz_bill_day d
         <where>
             <if test='yearOrMonth == "01"'>
-                and left(trim(d.date).7) = #{date}
+                and left(trim(d.date),7) = #{date}
             </if>
             <if test='yearOrMonth == "02"'>
                 and left(trim(d.date),4) = #{date}
