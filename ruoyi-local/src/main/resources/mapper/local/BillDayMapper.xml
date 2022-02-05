@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.local.mapper.BillDayMapper">
+    
+    <resultMap type="BillDay" id="BillDayResult">
+        <result property="id"    column="id"    />
+        <result property="date"    column="date"    />
+        <result property="money"    column="money"    />
+        <result property="type"    column="type"    />
+        <result property="payWay"    column="pay_way"    />
+        <result property="payType"    column="pay_type"    />
+        <result property="details"    column="details"    />
+        <result property="userId"    column="user_id"    />
+        <result property="createdTime"    column="created_time"    />
+    </resultMap>
+
+    <sql id="selectBillDayVo">
+        select id, date, money, type, pay_way, pay_type, details, user_id, created_time from jz_bill_day
+    </sql>
+
+    <select id="selectBillDayList" parameterType="BillDay" resultMap="BillDayResult">
+        <include refid="selectBillDayVo"/>
+        <where>  
+            <if test="date != null  and date != ''"> and date = #{date}</if>
+            <if test="money != null "> and money = #{money}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="payWay != null  and payWay != ''"> and pay_way = #{payWay}</if>
+            <if test="payType != null  and payType != ''"> and pay_type = #{payType}</if>
+            <if test="details != null  and details != ''"> and details = #{details}</if>
+            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectBillDayById" parameterType="String" resultMap="BillDayResult">
+        <include refid="selectBillDayVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertBillDay" parameterType="BillDay">
+        insert into jz_bill_day
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="date != null">date,</if>
+            <if test="money != null">money,</if>
+            <if test="type != null">type,</if>
+            <if test="payWay != null">pay_way,</if>
+            <if test="payType != null">pay_type,</if>
+            <if test="details != null">details,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="createdTime != null">created_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="date != null">#{date},</if>
+            <if test="money != null">#{money},</if>
+            <if test="type != null">#{type},</if>
+            <if test="payWay != null">#{payWay},</if>
+            <if test="payType != null">#{payType},</if>
+            <if test="details != null">#{details},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBillDay" parameterType="BillDay">
+        update jz_bill_day
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="date != null">date = #{date},</if>
+            <if test="money != null">money = #{money},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="payWay != null">pay_way = #{payWay},</if>
+            <if test="payType != null">pay_type = #{payType},</if>
+            <if test="details != null">details = #{details},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBillDayById" parameterType="String">
+        delete from jz_bill_day where id = #{id}
+    </delete>
+
+    <delete id="deleteBillDayByIds" parameterType="String">
+        delete from jz_bill_day where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
