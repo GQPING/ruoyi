@@ -1,7 +1,6 @@
 package com.ruoyi.local.domain.query;
 
-import java.io.Serializable;
-import java.util.Map;
+import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 查询参数
@@ -10,15 +9,12 @@ import java.util.Map;
  * @author cxw
  * @date 2022/2/5
  */
-public class QueryBillDay implements Serializable {
+public class QueryBillDay extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     /** 搜索值 */
     private String text;
-
-    /** 封装请求参数 */
-    private Map<String, Object> params;
 
     /** 账单日期 */
     private String date;
@@ -32,23 +28,12 @@ public class QueryBillDay implements Serializable {
     /** 支付类型 */
     private String payType;
 
-    /** 所属用户 */
-    private String userId;
-
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
-    }
-
-    public Map<String, Object> getParams() {
-        return params;
-    }
-
-    public void setParams(Map<String, Object> params) {
-        this.params = params;
     }
 
     public String getDate() {
@@ -81,13 +66,5 @@ public class QueryBillDay implements Serializable {
 
     public void setPayType(String payType) {
         this.payType = payType;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
     }
 }

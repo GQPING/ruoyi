@@ -135,7 +135,7 @@
         </template>
       </af-table-column>
       <af-table-column label="账单描述" align="center" prop="details" />
-      <af-table-column label="所属用户" align="center" prop="userId" />
+      <af-table-column label="所属用户" align="center" prop="userName" />
       <el-table-column label="创建时间" width="182" align="center" prop="createTime">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>

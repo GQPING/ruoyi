@@ -33,7 +33,7 @@ public class BillYear extends BaseEntity
 
     /** 所属用户 */
     @Excel(name = "所属用户")
-    private String userId;
+    private Long userId;
 
     public void setId(String id) 
     {
@@ -71,12 +71,12 @@ public class BillYear extends BaseEntity
     {
         return type;
     }
-    public void setUserId(String userId) 
+    public void setUserId(Long userId)
     {
         this.userId = userId;
     }
 
-    public String getUserId() 
+    public Long getUserId()
     {
         return userId;
     }

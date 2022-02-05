@@ -1,6 +1,8 @@
 package com.ruoyi.local.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.local.domain.query.QueryBillMonth;
 import com.ruoyi.local.domain.viewObject.BillMonthVO;
@@ -42,6 +44,7 @@ public class BillMonthServiceImpl implements IBillMonthService
      * @return 月度账单
      */
     @Override
+    @DataScope(deptAlias = "m", userAlias = "m")
     public List<BillMonthVO> selectBillMonthList(QueryBillMonth billMonth)
     {
         return billMonthMapper.selectBillMonthList(billMonth);

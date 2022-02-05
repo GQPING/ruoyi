@@ -13,22 +13,34 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="payType"    column="pay_type"    />
         <result property="details"    column="details"    />
         <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectBillDayVo">
-        select id, date, money, type, pay_way, pay_type, details, user_id, create_time from jz_bill_day
+        select d.id,
+               d.date,
+               d.money,
+               d.type,
+               d.pay_way,
+               d.pay_type,
+               d.details,
+               d.user_id,
+               u.user_name,
+               d.create_time
+        from jz_bill_day d
+        left join sys_user u on d.user_id = u.user_id
     </sql>
 
     <select id="selectBillDayList" parameterType="com.ruoyi.local.domain.query.QueryBillDay" resultMap="BillDayResult">
         <include refid="selectBillDayVo"/>
         <where>
-            <if test="text != null  and text != ''"> and details like concat('%',#{text},'%')</if>
-            <if test="date != null  and date != ''"> and date = #{date}</if>
-            <if test="type != null  and type != ''"> and type = #{type}</if>
-            <if test="payWay != null  and payWay != ''"> and pay_way = #{payWay}</if>
-            <if test="payType != null  and payType != ''"> and pay_type = #{payType}</if>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="text != null  and text != ''"> and d.details like concat('%',#{text},'%')</if>
+            <if test="date != null  and date != ''"> and d.date = #{date}</if>
+            <if test="type != null  and type != ''"> and d.type = #{type}</if>
+            <if test="payWay != null  and payWay != ''"> and d.pay_way = #{payWay}</if>
+            <if test="payType != null  and payType != ''"> and d.pay_type = #{payType}</if>
+            ${params.dataScope}
         </where>
         order by create_time desc
     </select>

@@ -35,8 +35,11 @@ public class BillYearVO implements Serializable
     private String type;
 
     /** 所属用户 */
+    private Long userId;
+
+    /** 所属用户 */
     @Excel(name = "所属用户")
-    private String userId;
+    private String userName;
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
@@ -79,12 +82,12 @@ public class BillYearVO implements Serializable
     {
         return type;
     }
-    public void setUserId(String userId)
+    public void setUserId(Long userId)
     {
         this.userId = userId;
     }
 
-    public String getUserId()
+    public Long getUserId()
     {
         return userId;
     }
@@ -98,6 +101,14 @@ public class BillYearVO implements Serializable
         return createTime;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -106,6 +117,7 @@ public class BillYearVO implements Serializable
                 .append("money", getMoney())
                 .append("type", getType())
                 .append("userId", getUserId())
+                .append("userName", getUserName())
                 .append("createTime", getCreateTime())
                 .toString();
     }

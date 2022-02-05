@@ -2,6 +2,7 @@ package com.ruoyi.local.service.impl;
 
 import java.util.List;
 
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.constant.DictConstant;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.uuid.IdUtils;
@@ -55,6 +56,7 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 日度账单
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "d")
     public List<BillDayVO> selectBillDayList(QueryBillDay billDay)
     {
         return billDayMapper.selectBillDayList(billDay);
@@ -72,8 +74,8 @@ public class BillDayServiceImpl implements IBillDayService
     {
         String uuid = IdUtils.fastSimpleUUID();
         billDay.setId(uuid);
-        String userName = SecurityUtils.getUsername();
-        billDay.setUserId(userName);
+        Long userId = SecurityUtils.getUserId();
+        billDay.setUserId(userId);
         return billDayMapper.insertBillDay(billDay);
     }
 

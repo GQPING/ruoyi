@@ -74,7 +74,7 @@
           <dict-tag :options="dict.type.BillType" :value="scope.row.type"/>
         </template>
       </el-table-column>
-      <el-table-column label="所属用户" align="center" prop="userId" />
+      <el-table-column label="所属用户" align="center" prop="userName" />
       <el-table-column label="创建时间" align="center" prop="createTime" width="182">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>

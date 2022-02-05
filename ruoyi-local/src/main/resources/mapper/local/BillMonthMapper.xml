@@ -10,19 +10,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="money"    column="money"    />
         <result property="type"    column="type"    />
         <result property="userId"    column="user_id"    />
+        <result property="userName"    column="user_name"    />
         <result property="createTime"    column="create_time"    />
     </resultMap>
 
     <sql id="selectBillMonthVo">
-        select id, month, money, type, user_id, create_time from jz_bill_month
+        select m.id,
+               m.month,
+               m.money,
+               m.type,
+               m.user_id,
+               u.user_name,
+               m.create_time
+        from jz_bill_month m
+        left join sys_user u on m.user_id = u.user_id
     </sql>
 
     <select id="selectBillMonthList" parameterType="com.ruoyi.local.domain.query.QueryBillMonth" resultMap="BillMonthResult">
         <include refid="selectBillMonthVo"/>
         <where>  
-            <if test="month != null  and month != ''"> and month = #{month}</if>
-            <if test="type != null  and type != ''"> and type = #{type}</if>
-            <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
+            <if test="month != null  and month != ''"> and m.month = #{month}</if>
+            <if test="type != null  and type != ''"> and m.type = #{type}</if>
+            ${params.dataScope}
         </where>
         order by create_time desc
     </select>

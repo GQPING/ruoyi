@@ -1,6 +1,8 @@
 package com.ruoyi.local.service.impl;
 
 import java.util.List;
+
+import com.ruoyi.common.annotation.DataScope;
 import com.ruoyi.common.utils.uuid.IdUtils;
 import com.ruoyi.local.domain.query.QueryBillYear;
 import com.ruoyi.local.domain.viewObject.BillYearVO;
@@ -42,6 +44,7 @@ public class BillYearServiceImpl implements IBillYearService
      * @return 年度账单
      */
     @Override
+    @DataScope(deptAlias = "y", userAlias = "y")
     public List<BillYearVO> selectBillYearList(QueryBillYear billYear)
     {
         return billYearMapper.selectBillYearList(billYear);
