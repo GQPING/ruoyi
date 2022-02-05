@@ -1,6 +1,12 @@
 package com.ruoyi.local.service.impl;
 
+import java.util.Date;
 import java.util.List;
+
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.uuid.IdUtils;
+import com.ruoyi.local.domain.query.QueryBillDay;
+import com.ruoyi.local.domain.viewObject.BillDayVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.local.mapper.BillDayMapper;
@@ -26,7 +32,7 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 日度账单
      */
     @Override
-    public BillDay selectBillDayById(String id)
+    public BillDayVO selectBillDayById(String id)
     {
         return billDayMapper.selectBillDayById(id);
     }
@@ -38,7 +44,7 @@ public class BillDayServiceImpl implements IBillDayService
      * @return 日度账单
      */
     @Override
-    public List<BillDay> selectBillDayList(BillDay billDay)
+    public List<BillDayVO> selectBillDayList(QueryBillDay billDay)
     {
         return billDayMapper.selectBillDayList(billDay);
     }
@@ -52,6 +58,10 @@ public class BillDayServiceImpl implements IBillDayService
     @Override
     public int insertBillDay(BillDay billDay)
     {
+        String uuid = IdUtils.fastSimpleUUID();
+        billDay.setId(uuid);
+        Date nowDate = DateUtils.getNowDate();
+        billDay.setCreateTime(nowDate);
         return billDayMapper.insertBillDay(billDay);
     }
 

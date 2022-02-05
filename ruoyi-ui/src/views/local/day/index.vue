@@ -1,26 +1,28 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="账单日期，yyyy-MM-dd" prop="date">
+      <el-form-item prop="searchValue">
+        <el-input
+          v-model="queryParams.text"
+          placeholder="请输入账单描述"
+          clearable
+          style="width: 140px"
+          suffix-icon="el-icon-search"
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="账单日期" prop="date">
         <el-input
           v-model="queryParams.date"
-          placeholder="请输入账单日期，yyyy-MM-dd"
+          placeholder="请选择账单日期"
           clearable
           size="small"
           @keyup.enter.native="handleQuery"
+          :picker-options="pickerOptions_expireTime"
         />
       </el-form-item>
-      <el-form-item label="账单金额，2位小数" prop="money">
-        <el-input
-          v-model="queryParams.money"
-          placeholder="请输入账单金额，2位小数"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="账单类型，01:：收入，02：支出" prop="type">
-        <el-select v-model="queryParams.type" placeholder="请选择账单类型，01:：收入，02：支出" clearable size="small">
+      <el-form-item label="账单类型" prop="type">
+        <el-select v-model="queryParams.type" placeholder="请选择账单类型" clearable size="small">
           <el-option
             v-for="dict in dict.type.BillType"
             :key="dict.value"
@@ -29,17 +31,18 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="支付方式，01：微信，02：支付宝，03：银行卡，04：现金" prop="payWay">
-        <el-input
-          v-model="queryParams.payWay"
-          placeholder="请输入支付方式，01：微信，02：支付宝，03：银行卡，04：现金"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item label="支付方式" prop="payWay">
+        <el-select v-model="queryParams.payWay" placeholder="请选择支付方式" clearable size="small">
+          <el-option
+            v-for="dict in dict.type.PayWay"
+            :key="dict.value"
+            :label="dict.label"
+            :value="dict.value"
+          />
+        </el-select>
       </el-form-item>
-      <el-form-item label="支付类型，01：电费，02：水费，03：房租，04：通讯费，05：蔬果费，06：电影费，07：交通费，08：早餐费，09：午餐费，10：晚餐费，11：零食费，12：衣服鞋帽，13：外卖费，14：其它杂费" prop="payType">
-        <el-select v-model="queryParams.payType" placeholder="请选择支付类型，01：电费，02：水费，03：房租，04：通讯费，05：蔬果费，06：电影费，07：交通费，08：早餐费，09：午餐费，10：晚餐费，11：零食费，12：衣服鞋帽，13：外卖费，14：其它杂费" clearable size="small">
+      <el-form-item label="支付类型" prop="payType">
+        <el-select v-model="queryParams.payType" placeholder="请选择支付类型" clearable size="small">
           <el-option
             v-for="dict in dict.type.PayType"
             :key="dict.value"
@@ -47,23 +50,6 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="所属用户" prop="userId">
-        <el-input
-          v-model="queryParams.userId"
-          placeholder="请输入所属用户"
-          clearable
-          size="small"
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="创建时间" prop="createdTime">
-        <el-date-picker clearable size="small"
-          v-model="queryParams.createdTime"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="选择创建时间">
-        </el-date-picker>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -119,26 +105,34 @@
 
     <el-table v-loading="loading" :data="dayList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主键" align="center" prop="id" />
-      <el-table-column label="账单日期，yyyy-MM-dd" align="center" prop="date" />
-      <el-table-column label="账单金额，2位小数" align="center" prop="money" />
-      <el-table-column label="账单类型，01:：收入，02：支出" align="center" prop="type">
+      <af-table-column
+        label="序号"
+        type="index"
+        align="center"
+      >
+        <template slot-scope="scope">
+          <span>{{ (queryParams.pageNum-1) * queryParams.pageSize + scope.$index +1 }}</span>
+        </template>
+      </af-table-column>
+      <af-table-column label="账单日期" align="center" prop="date" />
+      <af-table-column label="账单金额" align="center" prop="money" />
+      <af-table-column label="账单类型" align="center" prop="type">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.BillType" :value="scope.row.type"/>
         </template>
-      </el-table-column>
-      <el-table-column label="支付方式，01：微信，02：支付宝，03：银行卡，04：现金" align="center" prop="payWay">
+      </af-table-column>
+      <af-table-column label="支付方式" align="center" prop="payWay">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.PayWay" :value="scope.row.payWay"/>
         </template>
-      </el-table-column>
-      <el-table-column label="支付类型，01：电费，02：水费，03：房租，04：通讯费，05：蔬果费，06：电影费，07：交通费，08：早餐费，09：午餐费，10：晚餐费，11：零食费，12：衣服鞋帽，13：外卖费，14：其它杂费" align="center" prop="payType">
+      </af-table-column>
+      <af-table-column label="支付类型" align="center" prop="payType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.PayType" :value="scope.row.payType"/>
         </template>
-      </el-table-column>
-      <el-table-column label="账单描述" align="center" prop="details" />
-      <el-table-column label="所属用户" align="center" prop="userId" />
+      </af-table-column>
+      <af-table-column label="账单描述" align="center" prop="details" />
+      <af-table-column label="所属用户" align="center" prop="userId" />
       <el-table-column label="创建时间" align="center" prop="createdTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createdTime, '{y}-{m}-{d}') }}</span>
@@ -163,7 +157,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -175,48 +169,50 @@
     <!-- 添加或修改日度账单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="账单日期，yyyy-MM-dd" prop="date">
-          <el-input v-model="form.date" placeholder="请输入账单日期，yyyy-MM-dd" />
+        <el-form-item label="账单日期" prop="date">
+          <el-input
+            v-model="form.date"
+            placeholder="请选择账单日期"
+            clearable
+            size="small"
+            :picker-options="pickerOptions_expireTime"
+          />
         </el-form-item>
-        <el-form-item label="账单金额，2位小数" prop="money">
-          <el-input v-model="form.money" placeholder="请输入账单金额，2位小数" />
+        <el-form-item label="账单金额" prop="money">
+          <el-input v-model="form.money" placeholder="请输入账单金额" />
         </el-form-item>
-        <el-form-item label="账单类型，01:：收入，02：支出" prop="type">
-          <el-select v-model="form.type" placeholder="请选择账单类型，01:：收入，02：支出">
+        <el-form-item label="账单类型" prop="type">
+          <el-select v-model="form.type" placeholder="请选择账单类型">
             <el-option
               v-for="dict in dict.type.BillType"
               :key="dict.value"
               :label="dict.label"
-:value="dict.value"
+              :value="dict.value"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="支付方式，01：微信，02：支付宝，03：银行卡，04：现金" prop="payWay">
-          <el-input v-model="form.payWay" placeholder="请输入支付方式，01：微信，02：支付宝，03：银行卡，04：现金" />
+        <el-form-item label="支付方式" prop="payWay">
+          <el-select v-model="form.payWay" placeholder="请选择支付方式">
+            <el-option
+              v-for="dict in dict.type.PayWay"
+              :key="dict.value"
+              :label="dict.label"
+              :value="dict.value"
+            ></el-option>
+          </el-select>
         </el-form-item>
-        <el-form-item label="支付类型，01：电费，02：水费，03：房租，04：通讯费，05：蔬果费，06：电影费，07：交通费，08：早餐费，09：午餐费，10：晚餐费，11：零食费，12：衣服鞋帽，13：外卖费，14：其它杂费" prop="payType">
-          <el-select v-model="form.payType" placeholder="请选择支付类型，01：电费，02：水费，03：房租，04：通讯费，05：蔬果费，06：电影费，07：交通费，08：早餐费，09：午餐费，10：晚餐费，11：零食费，12：衣服鞋帽，13：外卖费，14：其它杂费">
+        <el-form-item label="支付类型" prop="payType">
+          <el-select v-model="form.payType" placeholder="请选择支付类型">
             <el-option
               v-for="dict in dict.type.PayType"
               :key="dict.value"
               :label="dict.label"
-:value="dict.value"
+              :value="dict.value"
             ></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="账单描述" prop="details">
           <el-input v-model="form.details" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
-        <el-form-item label="所属用户" prop="userId">
-          <el-input v-model="form.userId" placeholder="请输入所属用户" />
-        </el-form-item>
-        <el-form-item label="创建时间" prop="createdTime">
-          <el-date-picker clearable size="small"
-            v-model="form.createdTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="选择创建时间">
-          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -232,7 +228,7 @@ import { listDay, getDay, delDay, addDay, updateDay } from "@/api/local/day";
 
 export default {
   name: "Day",
-  dicts: ['PayType', 'BillType'],
+  dicts: ['PayWay', 'PayType', 'BillType'],
   data() {
     return {
       // 遮罩层
@@ -257,20 +253,29 @@ export default {
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        text:null,
         date: null,
-        money: null,
         type: null,
         payWay: null,
         payType: null,
-        details: null,
         userId: null,
-        createdTime: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-      }
+        money: [{
+          pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
+          message: "请输入合法的金额，最多2位小数",
+          trigger: "blur"
+        }],
+      },
+      //设置不可选择未来日期
+      pickerOptions_expireTime:{
+        disabledDate:(time) => {
+          return time.getTime() > Date.now();
+        }
+      },
     };
   },
   created() {

@@ -1,23 +1,21 @@
-package com.ruoyi.local.domain;
+package com.ruoyi.local.domain.viewObject;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.ruoyi.common.annotation.Excel;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
-import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
  * 日度账单对象 jz_bill_day
- * 
- * @author local
- * @date 2022-02-05
+ *
+ * @author cxw
+ * @date 2022/2/5
  */
-public class BillDay extends BaseEntity
+public class BillDayVO
 {
-    private static final long serialVersionUID = 1L;
-
     /** 主键 */
     private String id;
 
@@ -27,6 +25,7 @@ public class BillDay extends BaseEntity
 
     /** 账单金额 */
     @Excel(name = "账单金额")
+    @JsonFormat(shape= JsonFormat.Shape.STRING)
     private BigDecimal money;
 
     /** 账单类型 */
@@ -54,100 +53,100 @@ public class BillDay extends BaseEntity
     @Excel(name = "创建时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date createdTime;
 
-    public void setId(String id) 
+    public void setId(String id)
     {
         this.id = id;
     }
 
-    public String getId() 
+    public String getId()
     {
         return id;
     }
-    public void setDate(String date) 
+    public void setDate(String date)
     {
         this.date = date;
     }
 
-    public String getDate() 
+    public String getDate()
     {
         return date;
     }
-    public void setMoney(BigDecimal money) 
+    public void setMoney(BigDecimal money)
     {
         this.money = money;
     }
 
-    public BigDecimal getMoney() 
+    public BigDecimal getMoney()
     {
         return money;
     }
-    public void setType(String type) 
+    public void setType(String type)
     {
         this.type = type;
     }
 
-    public String getType() 
+    public String getType()
     {
         return type;
     }
-    public void setPayWay(String payWay) 
+    public void setPayWay(String payWay)
     {
         this.payWay = payWay;
     }
 
-    public String getPayWay() 
+    public String getPayWay()
     {
         return payWay;
     }
-    public void setPayType(String payType) 
+    public void setPayType(String payType)
     {
         this.payType = payType;
     }
 
-    public String getPayType() 
+    public String getPayType()
     {
         return payType;
     }
-    public void setDetails(String details) 
+    public void setDetails(String details)
     {
         this.details = details;
     }
 
-    public String getDetails() 
+    public String getDetails()
     {
         return details;
     }
-    public void setUserId(String userId) 
+    public void setUserId(String userId)
     {
         this.userId = userId;
     }
 
-    public String getUserId() 
+    public String getUserId()
     {
         return userId;
     }
-    public void setCreatedTime(Date createdTime) 
+    public void setCreatedTime(Date createdTime)
     {
         this.createdTime = createdTime;
     }
 
-    public Date getCreatedTime() 
+    public Date getCreatedTime()
     {
         return createdTime;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("date", getDate())
-            .append("money", getMoney())
-            .append("type", getType())
-            .append("payWay", getPayWay())
-            .append("payType", getPayType())
-            .append("details", getDetails())
-            .append("userId", getUserId())
-            .append("createdTime", getCreatedTime())
-            .toString();
+        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
+                .append("id", getId())
+                .append("date", getDate())
+                .append("money", getMoney())
+                .append("type", getType())
+                .append("payWay", getPayWay())
+                .append("payType", getPayType())
+                .append("details", getDetails())
+                .append("userId", getUserId())
+                .append("createdTime", getCreatedTime())
+                .toString();
     }
 }

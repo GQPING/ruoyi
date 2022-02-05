@@ -4,7 +4,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.local.mapper.BillDayMapper">
     
-    <resultMap type="BillDay" id="BillDayResult">
+    <resultMap type="com.ruoyi.local.domain.viewObject.BillDayVO" id="BillDayResult">
         <result property="id"    column="id"    />
         <result property="date"    column="date"    />
         <result property="money"    column="money"    />
@@ -20,26 +20,24 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, date, money, type, pay_way, pay_type, details, user_id, created_time from jz_bill_day
     </sql>
 
-    <select id="selectBillDayList" parameterType="BillDay" resultMap="BillDayResult">
+    <select id="selectBillDayList" parameterType="com.ruoyi.local.domain.query.QueryBillDay" resultMap="BillDayResult">
         <include refid="selectBillDayVo"/>
-        <where>  
+        <where>
+            <if test="text != null  and text != ''"> and details like concat('%',#{text},'%')</if>
             <if test="date != null  and date != ''"> and date = #{date}</if>
-            <if test="money != null "> and money = #{money}</if>
             <if test="type != null  and type != ''"> and type = #{type}</if>
             <if test="payWay != null  and payWay != ''"> and pay_way = #{payWay}</if>
             <if test="payType != null  and payType != ''"> and pay_type = #{payType}</if>
-            <if test="details != null  and details != ''"> and details = #{details}</if>
             <if test="userId != null  and userId != ''"> and user_id = #{userId}</if>
-            <if test="createdTime != null "> and created_time = #{createdTime}</if>
         </where>
     </select>
-    
+
     <select id="selectBillDayById" parameterType="String" resultMap="BillDayResult">
         <include refid="selectBillDayVo"/>
         where id = #{id}
     </select>
-        
-    <insert id="insertBillDay" parameterType="BillDay">
+
+    <insert id="insertBillDay" parameterType="com.ruoyi.local.domain.BillDay">
         insert into jz_bill_day
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -65,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateBillDay" parameterType="BillDay">
+    <update id="updateBillDay" parameterType="com.ruoyi.local.domain.BillDay">
         update jz_bill_day
         <trim prefix="SET" suffixOverrides=",">
             <if test="date != null">date = #{date},</if>
@@ -85,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <delete id="deleteBillDayByIds" parameterType="String">
-        delete from jz_bill_day where id in 
+        delete from jz_bill_day where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

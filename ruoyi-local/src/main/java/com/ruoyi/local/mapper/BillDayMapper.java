@@ -2,6 +2,9 @@ package com.ruoyi.local.mapper;
 
 import java.util.List;
 import com.ruoyi.local.domain.BillDay;
+import com.ruoyi.local.domain.query.QueryBillDay;
+import com.ruoyi.local.domain.viewObject.BillDayVO;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 日度账单Mapper接口
@@ -9,6 +12,7 @@ import com.ruoyi.local.domain.BillDay;
  * @author local
  * @date 2022-02-05
  */
+@Mapper
 public interface BillDayMapper 
 {
     /**
@@ -17,7 +21,7 @@ public interface BillDayMapper
      * @param id 日度账单主键
      * @return 日度账单
      */
-    public BillDay selectBillDayById(String id);
+    BillDayVO selectBillDayById(String id);
 
     /**
      * 查询日度账单列表
@@ -25,7 +29,7 @@ public interface BillDayMapper
      * @param billDay 日度账单
      * @return 日度账单集合
      */
-    public List<BillDay> selectBillDayList(BillDay billDay);
+    List<BillDayVO> selectBillDayList(QueryBillDay billDay);
 
     /**
      * 新增日度账单
@@ -33,7 +37,7 @@ public interface BillDayMapper
      * @param billDay 日度账单
      * @return 结果
      */
-    public int insertBillDay(BillDay billDay);
+    int insertBillDay(BillDay billDay);
 
     /**
      * 修改日度账单
@@ -41,7 +45,7 @@ public interface BillDayMapper
      * @param billDay 日度账单
      * @return 结果
      */
-    public int updateBillDay(BillDay billDay);
+    int updateBillDay(BillDay billDay);
 
     /**
      * 删除日度账单
@@ -49,7 +53,7 @@ public interface BillDayMapper
      * @param id 日度账单主键
      * @return 结果
      */
-    public int deleteBillDayById(String id);
+    int deleteBillDayById(String id);
 
     /**
      * 批量删除日度账单
@@ -57,5 +61,5 @@ public interface BillDayMapper
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
-    public int deleteBillDayByIds(String[] ids);
+    int deleteBillDayByIds(String[] ids);
 }

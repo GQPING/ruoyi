@@ -2,6 +2,10 @@ package com.ruoyi.local.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.common.utils.EscapeUtils;
+import com.ruoyi.local.domain.query.QueryBillDay;
+import com.ruoyi.local.domain.viewObject.BillDayVO;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,10 +43,11 @@ public class BillDayController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('local:day:list')")
     @GetMapping("/list")
-    public TableDataInfo list(BillDay billDay)
+    public TableDataInfo list(QueryBillDay billDay)
     {
         startPage();
-        List<BillDay> list = billDayService.selectBillDayList(billDay);
+        billDay.setText(EscapeUtils.escapeCheck(billDay.getText()));
+        List<BillDayVO> list = billDayService.selectBillDayList(billDay);
         return getDataTable(list);
     }
 
@@ -52,10 +57,11 @@ public class BillDayController extends BaseController
     @PreAuthorize("@ss.hasPermi('local:day:export')")
     @Log(title = "日度账单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
-    public void export(HttpServletResponse response, BillDay billDay)
+    public void export(HttpServletResponse response, QueryBillDay billDay)
     {
-        List<BillDay> list = billDayService.selectBillDayList(billDay);
-        ExcelUtil<BillDay> util = new ExcelUtil<BillDay>(BillDay.class);
+        billDay.setText(EscapeUtils.escapeCheck(billDay.getText()));
+        List<BillDayVO> list = billDayService.selectBillDayList(billDay);
+        ExcelUtil<BillDayVO> util = new ExcelUtil<>(BillDayVO.class);
         util.exportExcel(response, list, "日度账单数据");
     }
 
