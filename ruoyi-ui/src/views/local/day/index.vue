@@ -196,7 +196,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="支付方式" prop="payWay">
+        <el-form-item label="支付方式" prop="payWay" v-if="form.type == '02'">
           <el-select v-model="form.payWay" placeholder="请选择支付方式">
             <el-option
               v-for="dict in dict.type.PayWay"
@@ -206,7 +206,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="支付类型" prop="payType">
+        <el-form-item label="支付类型" prop="payType" v-if="form.type == '02'">
           <el-select v-model="form.payType" placeholder="请选择支付类型">
             <el-option
               v-for="dict in dict.type.PayType"
@@ -274,7 +274,11 @@ export default {
       form: {},
       // 表单校验
       rules: {
-        money: [{
+        date: [{ required: true, message: "账单日期不能为空", trigger: "change" }],
+        type: [{ required: true, message: "账单类型不能为空", trigger: "change" }],
+        payWay: [{ required: true, message: "支付方式不能为空", trigger: "change" }],
+        payType: [{ required: true, message: "支付类型不能为空", trigger: "change" }],
+        money: [{ required: true, message: "账单金额不能为空", trigger: "blur" }, {
           pattern: /^(([1-9]{1}\d*)|(0{1}))(\.\d{1,2})?$/,
           message: "请输入合法的金额，最多2位小数",
           trigger: "blur"
