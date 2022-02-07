@@ -103,45 +103,106 @@
           v-hasPermi="['local:day:export']"
         >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :dynamicKey.sync="dynamicKey" :showSearch.sync="showSearch" :showSummary.sync="showSummary" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="dayList" @selection-change="handleSelectionChange" border>
-      <el-table-column type="selection" width="55" align="center" />
-      <af-table-column
+    <el-table v-loading="loading"
+              :data="dayList"
+              @selection-change="handleSelectionChange"
+              border
+              stripe
+              :key="dynamicKey"
+              :show-summary="showSummary"
+              :summary-method="getSummaries"
+              :row-class-name="tableRowClassName">
+      <el-table-column
+        type="selection"
+        width="55"
+        align="center"
+        :resizable="false"
+        v-if="checkPermi(['local:day:export'])"
+      />
+      <el-table-column
         label="序号"
         type="index"
         align="center"
-      >
+        min-width="8%"
+        :resizable="false"
+        v-if="columns[0].visible">
         <template slot-scope="scope">
           <span>{{ (queryParams.pageNum-1) * queryParams.pageSize + scope.$index +1 }}</span>
         </template>
-      </af-table-column>
-      <af-table-column label="账单日期" width="106" align="center" prop="date" />
-      <af-table-column label="账单金额" width="106" align="center" prop="money" />
-      <af-table-column label="账单类型" width="80" align="center" prop="type">
+      </el-table-column>
+      <el-table-column label="账单日期"
+                       width="106"
+                       align="center"
+                       prop="date"
+                       :resizable="false"
+                       v-if="columns[1].visible"/>
+      <el-table-column label="账单金额(元)"
+                       width="106"
+                       align="center"
+                       prop="money"
+                       :resizable="false"
+                       v-if="columns[2].visible"/>
+      <el-table-column label="账单类型"
+                       width="80"
+                       align="center"
+                       prop="type"
+                       :resizable="false"
+                       v-if="columns[3].visible">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.BillType" :value="scope.row.type"/>
         </template>
-      </af-table-column>
-      <af-table-column label="支付方式" width="97" align="center" prop="payWay">
+      </el-table-column>
+      <el-table-column label="支付方式"
+                       width="97"
+                       align="center"
+                       prop="payWay"
+                       :resizable="false"
+                       v-if="columns[4].visible">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.PayWay" :value="scope.row.payWay"/>
         </template>
-      </af-table-column>
-      <af-table-column label="支付类型" width="106" align="center" prop="payType">
+      </el-table-column>
+      <el-table-column label="支付类型"
+                       width="106"
+                       align="center"
+                       prop="payType"
+                       :resizable="false"
+                       v-if="columns[5].visible">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.PayType" :value="scope.row.payType"/>
         </template>
-      </af-table-column>
-      <af-table-column label="账单描述" align="center" prop="details" />
-      <af-table-column label="所属用户" align="center" prop="userName" />
-      <el-table-column label="创建时间" width="182" align="center" prop="createTime">
+      </el-table-column>
+      <af-table-column label="账单描述"
+                       align="center"
+                       prop="details"
+                       :resizable="false"
+                       v-if="columns[6].visible"/>
+      <el-table-column label="所属用户"
+                       align="center"
+                       prop="userName"
+                       width="106"
+                       :resizable="false"
+                       v-if="columns[7].visible"/>
+      <el-table-column label="创建时间"
+                       width="182"
+                       align="center"
+                       prop="createTime"
+                       :resizable="false"
+                       v-if="columns[8].visible">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="130" fixed="right" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="操作"
+                       width="130"
+                       fixed="right"
+                       align="center"
+                       :resizable="false"
+                       v-if="checkPermi(['local:day:edit'])"
+                       class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -184,7 +245,9 @@
           />
         </el-form-item>
         <el-form-item label="账单金额" prop="money">
-          <el-input v-model="form.money" placeholder="请输入账单金额" />
+          <el-input v-model="form.money" placeholder="请输入账单金额">
+            <template slot="suffix">元</template>
+          </el-input>
         </el-form-item>
         <el-form-item label="账单类型" prop="type">
           <el-select v-model="form.type" placeholder="请选择账单类型">
@@ -230,12 +293,14 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
   </div>
 </template>
 
 <script>
 import { listDay, getDay, delDay, addDay, updateDay } from "@/api/local/day";
-
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+import { math } from '@/utils/mathjs.js'
 export default {
   name: "Day",
   dicts: ['PayWay', 'PayType', 'BillType'],
@@ -251,10 +316,26 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      // 显示表格合计
+      showSummary: false,
       // 总条数
       total: 0,
+      // 动态表格key值
+      dynamicKey: true,
       // 日度账单表格数据
       dayList: [],
+      // 显隐控制表格列
+      columns: [
+        { key: 0, label: `序号`, visible: true },
+        { key: 1, label: `账单日期`, visible: true },
+        { key: 2, label: `账单金额(元)`, visible: true },
+        { key: 3, label: `账单类型`, visible: true },
+        { key: 4, label: `支付方式`, visible: true },
+        { key: 5, label: `支付类型`, visible: true },
+        { key: 6, label: `账单描述`, visible: true },
+        { key: 7, label: `所属用户`, visible: true },
+        { key: 8, label: `创建时间`, visible: true }
+      ],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -296,6 +377,49 @@ export default {
     this.getList();
   },
   methods: {
+    /** table指定列求和函数 */
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        }
+        //判断需要求和的列
+        if (column.property === 'money') {
+          //求和列所有的数值
+          const values = data.map(item => Number(item[column.property]));
+          //判断该列是否含非数字
+          if (!values.every(value => isNaN(value))) {
+            //计算求和
+            sums[index] = this.$math.round(values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return math.add(prev, curr);
+              } else {
+                return prev;
+              }
+            }, 0), 2);
+          } else {
+            sums[index] = 'N/A';
+          }
+        } else {
+          sums[index] = '--';
+        }
+      });
+      return sums;
+    },
+    /** 权限校验 */
+    checkPermi,
+    /** table row class */
+    tableRowClassName({row, rowIndex}) {
+      if (row.type === '00') {
+        return 'warning-row';
+      } else {
+        return '';
+      }
+    },
     /** 查询日度账单列表 */
     getList() {
       this.loading = true;
@@ -403,5 +527,11 @@ export default {
   }
   ::v-deep .el-select {
     width: 100%;
+  }
+  ::v-deep .el-table .warning-row {
+    background: oldlace;
+  }
+  ::v-deep .el-table .success-row {
+    background: #f0f9eb;
   }
 </style>

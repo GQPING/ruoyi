@@ -1,6 +1,9 @@
 <template>
   <div class="top-right-btn">
     <el-row>
+      <el-tooltip class="item" effect="dark" :content="showSummary ? '隐藏合计' : '显示合计'" placement="top">
+        <el-button size="mini" circle icon="el-icon-shopping-cart-2" @click="tableSummary()" />
+      </el-tooltip>
       <el-tooltip class="item" effect="dark" :content="showSearch ? '隐藏搜索' : '显示搜索'" placement="top">
         <el-button size="mini" circle icon="el-icon-search" @click="toggleSearch()" />
       </el-tooltip>
@@ -35,6 +38,14 @@ export default {
     };
   },
   props: {
+    dynamicKey: {
+      type: Boolean,
+      default: true,
+    },
+    showSummary: {
+      type: Boolean,
+      default: true,
+    },
     showSearch: {
       type: Boolean,
       default: true,
@@ -52,6 +63,10 @@ export default {
     }
   },
   methods: {
+    // 合计
+    tableSummary() {
+      this.$emit("update:showSummary", !this.showSummary);
+    },
     // 搜索
     toggleSearch() {
       this.$emit("update:showSearch", !this.showSearch);
@@ -62,6 +77,8 @@ export default {
     },
     // 右侧列表元素变化
     dataChange(data) {
+      //动态更新表格Key
+      this.$emit("update:dynamicKey", !this.dynamicKey);
       for (let item in this.columns) {
         const key = this.columns[item].key;
         this.columns[item].visible = !data.includes(key);
@@ -75,6 +92,12 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+::v-deep .el-transfer-panel {
+    width: 45%;
+}
+::v-deep .el-transfer__buttons {
+  width: 10%;
+}
 ::v-deep .el-transfer__button {
   border-radius: 50%;
   padding: 12px;

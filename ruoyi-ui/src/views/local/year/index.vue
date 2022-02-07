@@ -49,33 +49,69 @@
           v-hasPermi="['local:year:export']"
         >导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :dynamicKey.sync="dynamicKey" :showSearch.sync="showSearch" :showSummary.sync="showSummary" @queryTable="getList" :columns="columns"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="yearList" @selection-change="handleSelectionChange" border>
-      <el-table-column type="selection" width="55" align="center" />
-      <af-table-column
+    <el-table v-loading="loading"
+              :data="yearList"
+              @selection-change="handleSelectionChange"
+              border
+              stripe
+              :key="dynamicKey"
+              :show-summary="showSummary"
+              :summary-method="getSummaries"
+              :row-class-name="tableRowClassName">
+      <el-table-column
+        type="selection"
+        width="55"
+        align="center"
+        :resizable="false"
+        v-if="checkPermi(['local:year:export'])"
+      />
+      <el-table-column
         label="序号"
         type="index"
         align="center"
-      >
+        min-width="8%"
+        :resizable="false"
+        v-if="columns[0].visible">
         <template slot-scope="scope">
           <span>{{ (queryParams.pageNum-1) * queryParams.pageSize + scope.$index +1 }}</span>
         </template>
-      </af-table-column>
-      <el-table-column label="账单年份" align="center" prop="year" width="80">
+      </el-table-column>
+      <el-table-column label="账单年份"
+                       align="center"
+                       prop="year"
+                       :resizable="false"
+                       v-if="columns[1].visible">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.year, '{y}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="账单金额" align="center" prop="money" />
-      <el-table-column label="账单类型" align="center" prop="type" width="80">
+      <el-table-column label="账单金额(元)"
+                       align="center"
+                       prop="money"
+                       :resizable="false"
+                       v-if="columns[2].visible"/>
+      <el-table-column label="账单类型"
+                       align="center"
+                       prop="type"
+                       :resizable="false"
+                       v-if="columns[3].visible">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.BillType" :value="scope.row.type"/>
         </template>
       </el-table-column>
-      <el-table-column label="所属用户" align="center" prop="userName" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="182">
+      <el-table-column label="所属用户"
+                       align="center"
+                       prop="userName"
+                       :resizable="false"
+                       v-if="columns[4].visible"/>
+      <el-table-column label="创建时间"
+                       align="center"
+                       prop="createTime"
+                       :resizable="false"
+                       v-if="columns[5].visible">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}:{s}') }}</span>
         </template>
@@ -89,12 +125,14 @@
       :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
+
   </div>
 </template>
 
 <script>
 import { listYear, getYear, delYear, addYear, updateYear } from "@/api/local/year";
-
+import { checkPermi, checkRole } from "@/utils/permission"; // 权限判断函数
+import { math } from '@/utils/mathjs.js'
 export default {
   name: "Year",
   dicts: ['BillType'],
@@ -110,10 +148,23 @@ export default {
       multiple: true,
       // 显示搜索条件
       showSearch: true,
+      // 显示表格合计
+      showSummary: false,
       // 总条数
       total: 0,
+      // 动态表格key值
+      dynamicKey: true,
       // 年度账单表格数据
       yearList: [],
+      // 显隐控制表格列
+      columns: [
+        { key: 0, label: `序号`, visible: true },
+        { key: 1, label: `账单年份`, visible: true },
+        { key: 2, label: `账单金额(元)`, visible: true },
+        { key: 3, label: `账单类型`, visible: true },
+        { key: 4, label: `所属用户`, visible: true },
+        { key: 5, label: `创建时间`, visible: true }
+      ],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -138,6 +189,49 @@ export default {
     this.getList();
   },
   methods: {
+    /** table指定列求和函数 */
+    getSummaries(param) {
+      const { columns, data } = param;
+      const sums = [];
+      columns.forEach((column, index) => {
+        if (index === 0) {
+          sums[index] = '合计';
+          return;
+        }
+        //判断需要求和的列
+        if (column.property === 'money') {
+          //求和列所有的数值
+          const values = data.map(item => Number(item[column.property]));
+          //判断该列是否含非数字
+          if (!values.every(value => isNaN(value))) {
+            //计算求和
+            sums[index] = this.$math.round(values.reduce((prev, curr) => {
+              const value = Number(curr);
+              if (!isNaN(value)) {
+                return math.add(prev, curr);
+              } else {
+                return prev;
+              }
+            }, 0), 2);
+          } else {
+            sums[index] = 'N/A';
+          }
+        } else {
+          sums[index] = '--';
+        }
+      });
+      return sums;
+    },
+    /** 权限校验 */
+    checkPermi,
+    /** table row class */
+    tableRowClassName({row, rowIndex}) {
+      if (row.type === '00') {
+        return 'warning-row';
+      } else {
+        return '';
+      }
+    },
     /** 查询年度账单列表 */
     getList() {
       this.loading = true;
@@ -182,3 +276,12 @@ export default {
   }
 };
 </script>
+
+<style lang="scss" scoped>
+  ::v-deep .el-table .warning-row {
+    background: oldlace;
+  }
+  ::v-deep .el-table .success-row {
+    background: #f0f9eb;
+  }
+</style>
