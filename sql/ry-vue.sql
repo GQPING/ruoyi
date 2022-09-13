@@ -1,0 +1,1399 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : tengxun___101.43.175.187
+ Source Server Type    : MySQL
+ Source Server Version : 50737 (5.7.37)
+ Source Host           : 101.43.175.187:3306
+ Source Schema         : ry-vue
+
+ Target Server Type    : MySQL
+ Target Server Version : 50737 (5.7.37)
+ File Encoding         : 65001
+
+ Date: 13/09/2022 09:28:58
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for gen_table
+-- ----------------------------
+DROP TABLE IF EXISTS `gen_table`;
+CREATE TABLE `gen_table`  (
+  `table_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `table_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '表名称',
+  `table_comment` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '表描述',
+  `sub_table_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '关联子表的表名',
+  `sub_table_fk_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '子表关联的外键名',
+  `class_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '实体类名称',
+  `tpl_category` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'crud' COMMENT '使用的模板（crud单表操作 tree树表操作）',
+  `package_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生成包路径',
+  `module_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生成模块名',
+  `business_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生成业务名',
+  `function_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生成功能名',
+  `function_author` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '生成功能作者',
+  `gen_type` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '生成代码方式（0zip压缩包 1自定义路径）',
+  `gen_path` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '/' COMMENT '生成路径（不填默认项目路径）',
+  `options` varchar(1000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '其它生成选项',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`table_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成业务表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of gen_table
+-- ----------------------------
+INSERT INTO `gen_table` VALUES (1, 'jz_bill_month', '月度账单', NULL, NULL, 'BillMonth', 'crud', 'com.ruoyi.local', 'local', 'month', '月度账单', 'local', '0', '/', '{\"parentMenuId\":2000}', 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:25:50', NULL);
+INSERT INTO `gen_table` VALUES (2, 'jz_bill_year', '年度账单', NULL, NULL, 'BillYear', 'crud', 'com.ruoyi.local', 'local', 'year', '年度账单', 'local', '0', '/', '{\"parentMenuId\":2000}', 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:26:37', NULL);
+
+-- ----------------------------
+-- Table structure for gen_table_column
+-- ----------------------------
+DROP TABLE IF EXISTS `gen_table_column`;
+CREATE TABLE `gen_table_column`  (
+  `column_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `table_id` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '归属表编号',
+  `column_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '列名称',
+  `column_comment` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '列描述',
+  `column_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '列类型',
+  `java_type` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'JAVA类型',
+  `java_field` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'JAVA字段名',
+  `is_pk` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否主键（1是）',
+  `is_increment` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否自增（1是）',
+  `is_required` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否必填（1是）',
+  `is_insert` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否为插入字段（1是）',
+  `is_edit` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否编辑字段（1是）',
+  `is_list` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否列表字段（1是）',
+  `is_query` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否查询字段（1是）',
+  `query_type` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'EQ' COMMENT '查询方式（等于、不等于、大于、小于、范围）',
+  `html_type` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '显示类型（文本框、文本域、下拉框、复选框、单选框、日期控件）',
+  `dict_type` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典类型',
+  `sort` int(11) NULL DEFAULT NULL COMMENT '排序',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`column_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '代码生成业务表字段' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of gen_table_column
+-- ----------------------------
+INSERT INTO `gen_table_column` VALUES (1, '1', 'id', '主键', 'varchar(32)', 'String', 'id', '1', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:25:50');
+INSERT INTO `gen_table_column` VALUES (2, '1', 'month', '账单月份，yyyy-MM', 'varchar(7)', 'String', 'month', '0', '0', NULL, NULL, NULL, '1', '1', 'EQ', 'datetime', '', 2, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:25:50');
+INSERT INTO `gen_table_column` VALUES (3, '1', 'money', '账单金额，2位小数', 'decimal(14,2)', 'BigDecimal', 'money', '0', '0', NULL, NULL, NULL, '1', NULL, 'EQ', 'input', '', 3, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:25:50');
+INSERT INTO `gen_table_column` VALUES (4, '1', 'type', '账单类型，01:：收入，02：支出', 'varchar(2)', 'String', 'type', '0', '0', NULL, NULL, NULL, '1', '1', 'EQ', 'select', 'BillType', 4, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:25:51');
+INSERT INTO `gen_table_column` VALUES (5, '1', 'user_id', '所属用户', 'varchar(32)', 'String', 'userId', '0', '0', NULL, NULL, NULL, '1', '1', 'EQ', 'select', '', 5, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:25:51');
+INSERT INTO `gen_table_column` VALUES (6, '1', 'create_time', '创建时间', 'datetime', 'Date', 'createTime', '0', '0', NULL, NULL, NULL, '1', NULL, 'EQ', 'datetime', '', 6, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:25:51');
+INSERT INTO `gen_table_column` VALUES (7, '2', 'id', '主键', 'varchar(32)', 'String', 'id', '1', '0', NULL, NULL, NULL, NULL, NULL, 'EQ', 'input', '', 1, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:26:38');
+INSERT INTO `gen_table_column` VALUES (8, '2', 'year', '账单年份，yyyy', 'varchar(4)', 'String', 'year', '0', '0', NULL, NULL, NULL, '1', '1', 'EQ', 'datetime', '', 2, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:26:38');
+INSERT INTO `gen_table_column` VALUES (9, '2', 'money', '账单金额，2位小数', 'decimal(14,2)', 'BigDecimal', 'money', '0', '0', NULL, NULL, NULL, '1', NULL, 'EQ', 'input', '', 3, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:26:38');
+INSERT INTO `gen_table_column` VALUES (10, '2', 'type', '账单类型，01:：收入，02：支出', 'varchar(2)', 'String', 'type', '0', '0', NULL, NULL, NULL, '1', '1', 'EQ', 'select', 'BillType', 4, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:26:38');
+INSERT INTO `gen_table_column` VALUES (11, '2', 'user_id', '所属用户', 'varchar(32)', 'String', 'userId', '0', '0', NULL, NULL, NULL, '1', '1', 'EQ', 'input', '', 5, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:26:38');
+INSERT INTO `gen_table_column` VALUES (12, '2', 'create_time', '创建时间', 'datetime', 'Date', 'createTime', '0', '0', NULL, NULL, NULL, '1', NULL, 'EQ', 'datetime', '', 6, 'admin', '2022-02-06 04:23:29', '', '2022-02-06 04:26:38');
+
+-- ----------------------------
+-- Table structure for jz_bill_day
+-- ----------------------------
+DROP TABLE IF EXISTS `jz_bill_day`;
+CREATE TABLE `jz_bill_day`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `date` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账单日期，yyyy-MM-dd',
+  `money` decimal(14, 2) NULL DEFAULT NULL COMMENT '账单金额，2位小数',
+  `type` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账单类型，01:：收入，02：支出',
+  `pay_way` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付方式，01：微信，02：支付宝，03：银行卡，04：现金',
+  `pay_type` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '支付类型，01：电费，02：水费，03：房租，04：通讯费，05：蔬果费，06：电影费，07：交通费，08：早餐费，09：午餐费，10：晚餐费，11：零食费，12：衣服鞋帽，13：外卖费，14：其它杂费',
+  `details` varchar(900) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账单描述',
+  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '所属用户',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '日度账单' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of jz_bill_day
+-- ----------------------------
+INSERT INTO `jz_bill_day` VALUES ('0a82d64e652d47e0aafbef4b4efbf8e9', '2022-02-11', 18.00, '02', '01', '09', '早餐3\n小火锅15', 100, '2022-02-13 16:44:52');
+INSERT INTO `jz_bill_day` VALUES ('0a9f9c9ebad14bf193572db44b6db8de', '2022-02-10', 19.90, '02', '02', '08', '茄汁面19.9', 100, '2022-02-13 16:44:09');
+INSERT INTO `jz_bill_day` VALUES ('106e1332b9344203a00366b7b008a3d0', '2022-02-07', 5.00, '02', '01', '09', '水煎包3\n粥2', 100, '2022-02-07 08:39:15');
+INSERT INTO `jz_bill_day` VALUES ('1226b5ac32374a1d8df94a57e0d49487', '2022-02-07', 40.00, '02', '03', '12', '公务员真题套装*1', 101, '2022-02-07 16:52:02');
+INSERT INTO `jz_bill_day` VALUES ('198cdec762b54e838d4de76e1cb53e39', '2022-02-12', 13.00, '02', '01', '09', '早餐3\n烧饼5\n串串5', 100, '2022-02-13 16:46:21');
+INSERT INTO `jz_bill_day` VALUES ('2183d83e9b31402792f0fcee4d6b07ee', '2022-02-07', 21.40, '02', '01', '08', '茄汁面21.4', 100, '2022-02-07 14:04:44');
+INSERT INTO `jz_bill_day` VALUES ('2749e7c52ee74c369468c3b3372af20f', '2022-02-09', 4.00, '02', '01', '09', '炸鸡4', 100, '2022-02-13 16:42:27');
+INSERT INTO `jz_bill_day` VALUES ('3a1cc5b6441e49138723a6b039a42300', '2022-02-07', 9.00, '02', '01', '12', '黑色笔芯盒装*1', 101, '2022-02-07 16:50:33');
+INSERT INTO `jz_bill_day` VALUES ('4d6d94e264ce4290928e29b1cb16860b', '2022-02-10', 13.00, '02', '01', '09', '早餐3\n午餐5\n烧饼5', 100, '2022-02-13 16:43:38');
+INSERT INTO `jz_bill_day` VALUES ('6a0e566a4c314ad9909314f85883a168', '2022-02-05', 20.00, '02', '01', '09', '热干面7\n麻辣烫13', 100, '2022-02-06 02:27:03');
+INSERT INTO `jz_bill_day` VALUES ('6f9b4c87dbf847a8b97130ce20ff28cc', '2022-02-12', 25.60, '02', '03', '11', '美团优选 25.6', 100, '2022-02-13 16:48:56');
+INSERT INTO `jz_bill_day` VALUES ('82bab0f29f09407c9ea02fb15f05811f', '2022-02-13', 31.50, '02', '01', '11', '拼多多厨房置物架31.5', 100, '2022-02-13 16:49:43');
+INSERT INTO `jz_bill_day` VALUES ('8f14e5664f7c41a0842f2d688690391a', '2022-02-12', 15.99, '02', '01', '11', '拼多多 手抓饼15.99', 100, '2022-02-13 16:48:01');
+INSERT INTO `jz_bill_day` VALUES ('dab4d5bec2204c5c8cdaaed80c5e3426', '2022-02-09', 20.00, '02', '01', '09', '小火锅16\n早餐3', 100, '2022-02-13 16:41:41');
+INSERT INTO `jz_bill_day` VALUES ('dea5f419faf94de2b3df2681a78cbc24', '2022-02-08', 3.00, '02', '01', '09', '早餐', 100, '2022-02-13 16:38:39');
+INSERT INTO `jz_bill_day` VALUES ('fdea9f35dea5433a8a7c7435a0262af4', '2022-02-06', 2.12, '02', '03', '12', '摄像头电源', 100, '2022-02-06 13:42:46');
+
+-- ----------------------------
+-- Table structure for jz_bill_month
+-- ----------------------------
+DROP TABLE IF EXISTS `jz_bill_month`;
+CREATE TABLE `jz_bill_month`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `month` varchar(7) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账单月份，yyyy-MM',
+  `money` decimal(14, 2) NULL DEFAULT NULL COMMENT '账单金额，2位小数',
+  `type` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账单类型，01:：收入，02：支出',
+  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '所属用户',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '月度账单' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of jz_bill_month
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for jz_bill_year
+-- ----------------------------
+DROP TABLE IF EXISTS `jz_bill_year`;
+CREATE TABLE `jz_bill_year`  (
+  `id` varchar(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '主键',
+  `year` varchar(4) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账单年份，yyyy',
+  `money` decimal(14, 2) NULL DEFAULT NULL COMMENT '账单金额，2位小数',
+  `type` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '账单类型，01:：收入，02：支出',
+  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '所属用户',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '年度账单' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of jz_bill_year
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for qrtz_blob_triggers
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_blob_triggers`;
+CREATE TABLE `qrtz_blob_triggers`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `trigger_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
+  `trigger_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
+  `blob_data` blob NULL COMMENT '存放持久化Trigger对象',
+  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
+  CONSTRAINT `QRTZ_BLOB_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `qrtz_triggers` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Blob类型的触发器表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_blob_triggers
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for qrtz_calendars
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_calendars`;
+CREATE TABLE `qrtz_calendars`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `calendar_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '日历名称',
+  `calendar` blob NOT NULL COMMENT '存放持久化calendar对象',
+  PRIMARY KEY (`sched_name`, `calendar_name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '日历信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_calendars
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for qrtz_cron_triggers
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_cron_triggers`;
+CREATE TABLE `qrtz_cron_triggers`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `trigger_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
+  `trigger_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
+  `cron_expression` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'cron表达式',
+  `time_zone_id` varchar(80) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '时区',
+  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
+  CONSTRAINT `QRTZ_CRON_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `qrtz_triggers` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = 'Cron类型的触发器表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_cron_triggers
+-- ----------------------------
+INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME1', 'DEFAULT', '0/10 * * * * ?', 'Asia/Shanghai');
+INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME100', 'DEFAULT', '0 0 0 1 * ?', 'Asia/Shanghai');
+INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME101', 'DEFAULT', '30 0 0 1 1 ? *', 'Asia/Shanghai');
+INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME2', 'DEFAULT', '0/15 * * * * ?', 'Asia/Shanghai');
+INSERT INTO `qrtz_cron_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME3', 'DEFAULT', '0/20 * * * * ?', 'Asia/Shanghai');
+
+-- ----------------------------
+-- Table structure for qrtz_fired_triggers
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_fired_triggers`;
+CREATE TABLE `qrtz_fired_triggers`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `entry_id` varchar(95) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度器实例id',
+  `trigger_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
+  `trigger_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
+  `instance_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度器实例名',
+  `fired_time` bigint(13) NOT NULL COMMENT '触发的时间',
+  `sched_time` bigint(13) NOT NULL COMMENT '定时器制定的时间',
+  `priority` int(11) NOT NULL COMMENT '优先级',
+  `state` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '状态',
+  `job_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务名称',
+  `job_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '任务组名',
+  `is_nonconcurrent` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否并发',
+  `requests_recovery` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '是否接受恢复执行',
+  PRIMARY KEY (`sched_name`, `entry_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '已触发的触发器表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_fired_triggers
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for qrtz_job_details
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_job_details`;
+CREATE TABLE `qrtz_job_details`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `job_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '任务名称',
+  `job_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '任务组名',
+  `description` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '相关介绍',
+  `job_class_name` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '执行任务类名称',
+  `is_durable` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '是否持久化',
+  `is_nonconcurrent` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '是否并发',
+  `is_update_data` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '是否更新数据',
+  `requests_recovery` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '是否接受恢复执行',
+  `job_data` blob NULL COMMENT '存放持久化job对象',
+  PRIMARY KEY (`sched_name`, `job_name`, `job_group`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '任务详细信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_job_details
+-- ----------------------------
+INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME1', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B597419030000787077080000017ECAD25CB878707400007070707400013174000E302F3130202A202A202A202A203F74001172795461736B2E72794E6F506172616D7374000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000001740018E7B3BBE7BB9FE9BB98E8AEA4EFBC88E697A0E58F82EFBC8974000133740001317800);
+INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME100', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B597419030000787077080000017ECBEEADE078707400007070707400013174000B30203020302031202A203F74001C62696C6C5461736B2E72794E6F506172616D7342794D6F6E7468282974000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000064740018E8B4A6E58D95E69C88E5BAA6EFBC88E7949FE68890EFBC8974000133740001317800);
+INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME101', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B597419030000787077080000017ECBEF984078707400007070707400013174000E33302030203020312031203F202A74001B62696C6C5461736B2E72794E6F506172616D73427959656172282974000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000065740018E8B4A6E58D95E5B9B4E5BAA6EFBC88E7949FE68890EFBC8974000133740001317800);
+INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME2', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B597419030000787077080000017ECAD25CB878707400007070707400013174000E302F3135202A202A202A202A203F74001572795461736B2E7279506172616D7328277279272974000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000002740018E7B3BBE7BB9FE9BB98E8AEA4EFBC88E69C89E58F82EFBC8974000133740001317800);
+INSERT INTO `qrtz_job_details` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME3', 'DEFAULT', NULL, 'com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution', '0', '1', '0', '0', 0xACED0005737200156F72672E71756172747A2E4A6F62446174614D61709FB083E8BFA9B0CB020000787200266F72672E71756172747A2E7574696C732E537472696E674B65794469727479466C61674D61708208E8C3FBC55D280200015A0013616C6C6F77735472616E7369656E74446174617872001D6F72672E71756172747A2E7574696C732E4469727479466C61674D617013E62EAD28760ACE0200025A000564697274794C00036D617074000F4C6A6176612F7574696C2F4D61703B787001737200116A6176612E7574696C2E486173684D61700507DAC1C31660D103000246000A6C6F6164466163746F724900097468726573686F6C6478703F4000000000000C7708000000100000000174000F5441534B5F50524F504552544945537372001E636F6D2E72756F79692E71756172747A2E646F6D61696E2E5379734A6F6200000000000000010200084C000A636F6E63757272656E747400124C6A6176612F6C616E672F537472696E673B4C000E63726F6E45787072657373696F6E71007E00094C000C696E766F6B6554617267657471007E00094C00086A6F6247726F757071007E00094C00056A6F6249647400104C6A6176612F6C616E672F4C6F6E673B4C00076A6F624E616D6571007E00094C000D6D697366697265506F6C69637971007E00094C000673746174757371007E000978720027636F6D2E72756F79692E636F6D6D6F6E2E636F72652E646F6D61696E2E42617365456E7469747900000000000000010200074C0008637265617465427971007E00094C000A63726561746554696D657400104C6A6176612F7574696C2F446174653B4C0006706172616D7371007E00034C000672656D61726B71007E00094C000B73656172636856616C756571007E00094C0008757064617465427971007E00094C000A75706461746554696D6571007E000C787074000561646D696E7372000E6A6176612E7574696C2E44617465686A81014B597419030000787077080000017ECAD25CB878707400007070707400013174000E302F3230202A202A202A202A203F74003872795461736B2E72794D756C7469706C65506172616D7328277279272C20747275652C20323030304C2C203331362E3530442C203130302974000744454641554C547372000E6A6176612E6C616E672E4C6F6E673B8BE490CC8F23DF0200014A000576616C7565787200106A6176612E6C616E672E4E756D62657286AC951D0B94E08B02000078700000000000000003740018E7B3BBE7BB9FE9BB98E8AEA4EFBC88E5A49AE58F82EFBC8974000133740001317800);
+
+-- ----------------------------
+-- Table structure for qrtz_locks
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_locks`;
+CREATE TABLE `qrtz_locks`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `lock_name` varchar(40) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '悲观锁名称',
+  PRIMARY KEY (`sched_name`, `lock_name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '存储的悲观锁信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_locks
+-- ----------------------------
+INSERT INTO `qrtz_locks` VALUES ('RuoyiScheduler', 'STATE_ACCESS');
+INSERT INTO `qrtz_locks` VALUES ('RuoyiScheduler', 'TRIGGER_ACCESS');
+
+-- ----------------------------
+-- Table structure for qrtz_paused_trigger_grps
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_paused_trigger_grps`;
+CREATE TABLE `qrtz_paused_trigger_grps`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `trigger_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
+  PRIMARY KEY (`sched_name`, `trigger_group`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '暂停的触发器表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_paused_trigger_grps
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for qrtz_scheduler_state
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_scheduler_state`;
+CREATE TABLE `qrtz_scheduler_state`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `instance_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '实例名称',
+  `last_checkin_time` bigint(13) NOT NULL COMMENT '上次检查时间',
+  `checkin_interval` bigint(13) NOT NULL COMMENT '检查间隔时间',
+  PRIMARY KEY (`sched_name`, `instance_name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '调度器状态表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_scheduler_state
+-- ----------------------------
+INSERT INTO `qrtz_scheduler_state` VALUES ('RuoyiScheduler', 'VM-24-3-centos1644142260438', 1647206213173, 15000);
+
+-- ----------------------------
+-- Table structure for qrtz_simple_triggers
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_simple_triggers`;
+CREATE TABLE `qrtz_simple_triggers`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `trigger_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
+  `trigger_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
+  `repeat_count` bigint(7) NOT NULL COMMENT '重复的次数统计',
+  `repeat_interval` bigint(12) NOT NULL COMMENT '重复的间隔时间',
+  `times_triggered` bigint(10) NOT NULL COMMENT '已经触发的次数',
+  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
+  CONSTRAINT `QRTZ_SIMPLE_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `qrtz_triggers` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '简单触发器的信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_simple_triggers
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for qrtz_simprop_triggers
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_simprop_triggers`;
+CREATE TABLE `qrtz_simprop_triggers`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `trigger_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_name的外键',
+  `trigger_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_triggers表trigger_group的外键',
+  `str_prop_1` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'String类型的trigger的第一个参数',
+  `str_prop_2` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'String类型的trigger的第二个参数',
+  `str_prop_3` varchar(512) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'String类型的trigger的第三个参数',
+  `int_prop_1` int(11) NULL DEFAULT NULL COMMENT 'int类型的trigger的第一个参数',
+  `int_prop_2` int(11) NULL DEFAULT NULL COMMENT 'int类型的trigger的第二个参数',
+  `long_prop_1` bigint(20) NULL DEFAULT NULL COMMENT 'long类型的trigger的第一个参数',
+  `long_prop_2` bigint(20) NULL DEFAULT NULL COMMENT 'long类型的trigger的第二个参数',
+  `dec_prop_1` decimal(13, 4) NULL DEFAULT NULL COMMENT 'decimal类型的trigger的第一个参数',
+  `dec_prop_2` decimal(13, 4) NULL DEFAULT NULL COMMENT 'decimal类型的trigger的第二个参数',
+  `bool_prop_1` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Boolean类型的trigger的第一个参数',
+  `bool_prop_2` varchar(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT 'Boolean类型的trigger的第二个参数',
+  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
+  CONSTRAINT `QRTZ_SIMPROP_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `trigger_name`, `trigger_group`) REFERENCES `qrtz_triggers` (`sched_name`, `trigger_name`, `trigger_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '同步机制的行锁表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_simprop_triggers
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for qrtz_triggers
+-- ----------------------------
+DROP TABLE IF EXISTS `qrtz_triggers`;
+CREATE TABLE `qrtz_triggers`  (
+  `sched_name` varchar(120) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调度名称',
+  `trigger_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '触发器的名字',
+  `trigger_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '触发器所属组的名字',
+  `job_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_job_details表job_name的外键',
+  `job_group` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'qrtz_job_details表job_group的外键',
+  `description` varchar(250) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '相关介绍',
+  `next_fire_time` bigint(13) NULL DEFAULT NULL COMMENT '上一次触发时间（毫秒）',
+  `prev_fire_time` bigint(13) NULL DEFAULT NULL COMMENT '下一次触发时间（默认为-1表示不触发）',
+  `priority` int(11) NULL DEFAULT NULL COMMENT '优先级',
+  `trigger_state` varchar(16) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '触发器状态',
+  `trigger_type` varchar(8) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '触发器的类型',
+  `start_time` bigint(13) NOT NULL COMMENT '开始时间',
+  `end_time` bigint(13) NULL DEFAULT NULL COMMENT '结束时间',
+  `calendar_name` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日程表名称',
+  `misfire_instr` smallint(2) NULL DEFAULT NULL COMMENT '补偿执行的策略',
+  `job_data` blob NULL COMMENT '存放持久化job对象',
+  PRIMARY KEY (`sched_name`, `trigger_name`, `trigger_group`) USING BTREE,
+  INDEX `sched_name`(`sched_name`, `job_name`, `job_group`) USING BTREE,
+  CONSTRAINT `QRTZ_TRIGGERS_ibfk_1` FOREIGN KEY (`sched_name`, `job_name`, `job_group`) REFERENCES `qrtz_job_details` (`sched_name`, `job_name`, `job_group`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '触发器详细信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of qrtz_triggers
+-- ----------------------------
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME1', 'DEFAULT', 'TASK_CLASS_NAME1', 'DEFAULT', NULL, 1644288850000, -1, 5, 'PAUSED', 'CRON', 1644288844000, 0, NULL, 2, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME100', 'DEFAULT', 'TASK_CLASS_NAME100', 'DEFAULT', NULL, 1646064000000, -1, 5, 'PAUSED', 'CRON', 1644288845000, 0, NULL, 2, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME101', 'DEFAULT', 'TASK_CLASS_NAME101', 'DEFAULT', NULL, 1672502430000, -1, 5, 'PAUSED', 'CRON', 1644288846000, 0, NULL, 2, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME2', 'DEFAULT', 'TASK_CLASS_NAME2', 'DEFAULT', NULL, 1644288855000, -1, 5, 'PAUSED', 'CRON', 1644288844000, 0, NULL, 2, '');
+INSERT INTO `qrtz_triggers` VALUES ('RuoyiScheduler', 'TASK_CLASS_NAME3', 'DEFAULT', 'TASK_CLASS_NAME3', 'DEFAULT', NULL, 1644288860000, -1, 5, 'PAUSED', 'CRON', 1644288845000, 0, NULL, 2, '');
+
+-- ----------------------------
+-- Table structure for sys_config
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_config`;
+CREATE TABLE `sys_config`  (
+  `config_id` int(5) NOT NULL AUTO_INCREMENT COMMENT '参数主键',
+  `config_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数名称',
+  `config_key` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数键名',
+  `config_value` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '参数键值',
+  `config_type` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'N' COMMENT '系统内置（Y是 N否）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`config_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '参数配置表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_config
+-- ----------------------------
+INSERT INTO `sys_config` VALUES (1, '主框架页-默认皮肤样式名称', 'sys.index.skinName', 'skin-blue', 'Y', 'admin', '2022-02-06 00:58:11', '', NULL, '蓝色 skin-blue、绿色 skin-green、紫色 skin-purple、红色 skin-red、黄色 skin-yellow');
+INSERT INTO `sys_config` VALUES (2, '用户管理-账号初始密码', 'sys.user.initPassword', '123456', 'Y', 'admin', '2022-02-06 00:58:11', '', NULL, '初始化密码 123456');
+INSERT INTO `sys_config` VALUES (3, '主框架页-侧边栏主题', 'sys.index.sideTheme', 'theme-dark', 'Y', 'admin', '2022-02-06 00:58:11', '', NULL, '深色主题theme-dark，浅色主题theme-light');
+INSERT INTO `sys_config` VALUES (4, '账号自助-验证码开关', 'sys.account.captchaOnOff', 'true', 'Y', 'admin', '2022-02-06 00:58:11', '', NULL, '是否开启验证码功能（true开启，false关闭）');
+INSERT INTO `sys_config` VALUES (5, '账号自助-是否开启用户注册功能', 'sys.account.registerUser', 'false', 'Y', 'admin', '2022-02-06 00:58:11', '', NULL, '是否开启注册用户功能（true开启，false关闭）');
+
+-- ----------------------------
+-- Table structure for sys_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dept`;
+CREATE TABLE `sys_dept`  (
+  `dept_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '部门id',
+  `parent_id` bigint(20) NULL DEFAULT 0 COMMENT '父部门id',
+  `ancestors` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '祖级列表',
+  `dept_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '部门名称',
+  `order_num` int(4) NULL DEFAULT 0 COMMENT '显示顺序',
+  `leader` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '负责人',
+  `phone` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '联系电话',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '邮箱',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '部门状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  PRIMARY KEY (`dept_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 110 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '部门表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_dept
+-- ----------------------------
+INSERT INTO `sys_dept` VALUES (100, 0, '0', '若依科技', 0, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (101, 100, '0,100', '深圳总公司', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (102, 100, '0,100', '长沙分公司', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (103, 101, '0,100,101', '研发部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (104, 101, '0,100,101', '市场部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (105, 101, '0,100,101', '测试部门', 3, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (106, 101, '0,100,101', '财务部门', 4, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (107, 101, '0,100,101', '运维部门', 5, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (108, 102, '0,100,102', '市场部门', 1, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+INSERT INTO `sys_dept` VALUES (109, 102, '0,100,102', '财务部门', 2, '若依', '15888888888', 'ry@qq.com', '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL);
+
+-- ----------------------------
+-- Table structure for sys_dict_data
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict_data`;
+CREATE TABLE `sys_dict_data`  (
+  `dict_code` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典编码',
+  `dict_sort` int(4) NULL DEFAULT 0 COMMENT '字典排序',
+  `dict_label` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典标签',
+  `dict_value` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典键值',
+  `dict_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典类型',
+  `css_class` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '样式属性（其他样式扩展）',
+  `list_class` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '表格回显样式',
+  `is_default` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT 'N' COMMENT '是否默认（Y是 N否）',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`dict_code`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 120 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典数据表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_dict_data
+-- ----------------------------
+INSERT INTO `sys_dict_data` VALUES (1, 1, '男', '0', 'sys_user_sex', '', '', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '性别男');
+INSERT INTO `sys_dict_data` VALUES (2, 2, '女', '1', 'sys_user_sex', '', '', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '性别女');
+INSERT INTO `sys_dict_data` VALUES (3, 3, '未知', '2', 'sys_user_sex', '', '', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '性别未知');
+INSERT INTO `sys_dict_data` VALUES (4, 1, '显示', '0', 'sys_show_hide', '', 'primary', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '显示菜单');
+INSERT INTO `sys_dict_data` VALUES (5, 2, '隐藏', '1', 'sys_show_hide', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '隐藏菜单');
+INSERT INTO `sys_dict_data` VALUES (6, 1, '正常', '0', 'sys_normal_disable', '', 'primary', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '正常状态');
+INSERT INTO `sys_dict_data` VALUES (7, 2, '停用', '1', 'sys_normal_disable', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '停用状态');
+INSERT INTO `sys_dict_data` VALUES (8, 1, '正常', '0', 'sys_job_status', '', 'primary', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '正常状态');
+INSERT INTO `sys_dict_data` VALUES (9, 2, '暂停', '1', 'sys_job_status', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '停用状态');
+INSERT INTO `sys_dict_data` VALUES (10, 1, '默认', 'DEFAULT', 'sys_job_group', '', '', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '默认分组');
+INSERT INTO `sys_dict_data` VALUES (11, 2, '系统', 'SYSTEM', 'sys_job_group', '', '', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '系统分组');
+INSERT INTO `sys_dict_data` VALUES (12, 1, '是', 'Y', 'sys_yes_no', '', 'primary', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '系统默认是');
+INSERT INTO `sys_dict_data` VALUES (13, 2, '否', 'N', 'sys_yes_no', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '系统默认否');
+INSERT INTO `sys_dict_data` VALUES (14, 1, '通知', '1', 'sys_notice_type', '', 'warning', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '通知');
+INSERT INTO `sys_dict_data` VALUES (15, 2, '公告', '2', 'sys_notice_type', '', 'success', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '公告');
+INSERT INTO `sys_dict_data` VALUES (16, 1, '正常', '0', 'sys_notice_status', '', 'primary', 'Y', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '正常状态');
+INSERT INTO `sys_dict_data` VALUES (17, 2, '关闭', '1', 'sys_notice_status', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '关闭状态');
+INSERT INTO `sys_dict_data` VALUES (18, 1, '新增', '1', 'sys_oper_type', '', 'info', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '新增操作');
+INSERT INTO `sys_dict_data` VALUES (19, 2, '修改', '2', 'sys_oper_type', '', 'info', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '修改操作');
+INSERT INTO `sys_dict_data` VALUES (20, 3, '删除', '3', 'sys_oper_type', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '删除操作');
+INSERT INTO `sys_dict_data` VALUES (21, 4, '授权', '4', 'sys_oper_type', '', 'primary', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '授权操作');
+INSERT INTO `sys_dict_data` VALUES (22, 5, '导出', '5', 'sys_oper_type', '', 'warning', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '导出操作');
+INSERT INTO `sys_dict_data` VALUES (23, 6, '导入', '6', 'sys_oper_type', '', 'warning', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '导入操作');
+INSERT INTO `sys_dict_data` VALUES (24, 7, '强退', '7', 'sys_oper_type', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '强退操作');
+INSERT INTO `sys_dict_data` VALUES (25, 8, '生成代码', '8', 'sys_oper_type', '', 'warning', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '生成操作');
+INSERT INTO `sys_dict_data` VALUES (26, 9, '清空数据', '9', 'sys_oper_type', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '清空操作');
+INSERT INTO `sys_dict_data` VALUES (27, 1, '成功', '0', 'sys_common_status', '', 'primary', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '正常状态');
+INSERT INTO `sys_dict_data` VALUES (28, 2, '失败', '1', 'sys_common_status', '', 'danger', 'N', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '停用状态');
+INSERT INTO `sys_dict_data` VALUES (100, 0, '收入', '01', 'BillType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:52:20', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (101, 1, '支出', '02', 'BillType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:52:30', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (102, 0, '现金', '01', 'PayWay', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:53:11', 'admin', '2022-02-13 18:02:57', NULL);
+INSERT INTO `sys_dict_data` VALUES (103, 1, '微信', '02', 'PayWay', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:53:33', 'admin', '2022-02-13 18:03:04', NULL);
+INSERT INTO `sys_dict_data` VALUES (106, 0, '电费', '01', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:54:21', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (107, 1, '水费', '02', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:54:30', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (108, 2, '房租', '03', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:54:42', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (109, 3, '通讯费', '04', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:55:33', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (110, 4, '蔬果费', '05', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:57:00', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (111, 5, '电影票', '06', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:57:48', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (112, 6, '交通费', '07', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:58:14', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (113, 7, '外卖费', '08', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:58:29', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (114, 8, '买饭费', '09', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 01:59:23', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (115, 9, '零食费', '10', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 02:00:15', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (116, 10, '生活用品', '11', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 02:00:40', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (117, 11, '其它杂费', '12', 'PayType', NULL, 'default', 'N', '0', 'admin', '2022-02-06 02:01:34', 'admin', '2022-02-06 02:01:41', NULL);
+INSERT INTO `sys_dict_data` VALUES (118, 2, '支付宝', '03', 'PayWay', NULL, 'default', 'N', '0', 'admin', '2022-02-13 18:02:22', '', NULL, NULL);
+INSERT INTO `sys_dict_data` VALUES (119, 3, '银行卡', '04', 'PayWay', NULL, 'default', 'N', '0', 'admin', '2022-02-13 18:02:42', '', NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_dict_type
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_dict_type`;
+CREATE TABLE `sys_dict_type`  (
+  `dict_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '字典主键',
+  `dict_name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典名称',
+  `dict_type` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '字典类型',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`dict_id`) USING BTREE,
+  UNIQUE INDEX `dict_type`(`dict_type`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 103 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '字典类型表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_dict_type
+-- ----------------------------
+INSERT INTO `sys_dict_type` VALUES (1, '用户性别', 'sys_user_sex', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '用户性别列表');
+INSERT INTO `sys_dict_type` VALUES (2, '菜单状态', 'sys_show_hide', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '菜单状态列表');
+INSERT INTO `sys_dict_type` VALUES (3, '系统开关', 'sys_normal_disable', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '系统开关列表');
+INSERT INTO `sys_dict_type` VALUES (4, '任务状态', 'sys_job_status', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '任务状态列表');
+INSERT INTO `sys_dict_type` VALUES (5, '任务分组', 'sys_job_group', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '任务分组列表');
+INSERT INTO `sys_dict_type` VALUES (6, '系统是否', 'sys_yes_no', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '系统是否列表');
+INSERT INTO `sys_dict_type` VALUES (7, '通知类型', 'sys_notice_type', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '通知类型列表');
+INSERT INTO `sys_dict_type` VALUES (8, '通知状态', 'sys_notice_status', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '通知状态列表');
+INSERT INTO `sys_dict_type` VALUES (9, '操作类型', 'sys_oper_type', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '操作类型列表');
+INSERT INTO `sys_dict_type` VALUES (10, '系统状态', 'sys_common_status', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '登录状态列表');
+INSERT INTO `sys_dict_type` VALUES (100, '账单类型', 'BillType', '0', 'admin', '2022-02-06 01:51:01', '', NULL, NULL);
+INSERT INTO `sys_dict_type` VALUES (101, '支付方式', 'PayWay', '0', 'admin', '2022-02-06 01:51:20', '', NULL, NULL);
+INSERT INTO `sys_dict_type` VALUES (102, '支付类型', 'PayType', '0', 'admin', '2022-02-06 01:51:35', '', NULL, NULL);
+
+-- ----------------------------
+-- Table structure for sys_job
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_job`;
+CREATE TABLE `sys_job`  (
+  `job_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务ID',
+  `job_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '任务名称',
+  `job_group` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'DEFAULT' COMMENT '任务组名',
+  `invoke_target` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调用目标字符串',
+  `cron_expression` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT 'cron执行表达式',
+  `misfire_policy` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '3' COMMENT '计划执行错误策略（1立即执行 2执行一次 3放弃执行）',
+  `concurrent` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '1' COMMENT '是否并发执行（0允许 1禁止）',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '状态（0正常 1暂停）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注信息',
+  PRIMARY KEY (`job_id`, `job_name`, `job_group`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务调度表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_job
+-- ----------------------------
+INSERT INTO `sys_job` VALUES (1, '系统默认（无参）', 'DEFAULT', 'ryTask.ryNoParams', '0/10 * * * * ?', '3', '1', '1', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_job` VALUES (2, '系统默认（有参）', 'DEFAULT', 'ryTask.ryParams(\'ry\')', '0/15 * * * * ?', '3', '1', '1', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_job` VALUES (3, '系统默认（多参）', 'DEFAULT', 'ryTask.ryMultipleParams(\'ry\', true, 2000L, 316.50D, 100)', '0/20 * * * * ?', '3', '1', '1', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_job` VALUES (100, '账单月度（生成）', 'DEFAULT', 'billTask.ryNoParamsByMonth()', '0 0 0 1 * ?', '3', '1', '1', 'admin', '2022-02-06 06:08:44', 'admin', '2022-02-06 06:09:54', '');
+INSERT INTO `sys_job` VALUES (101, '账单年度（生成）', 'DEFAULT', 'billTask.ryNoParamsByYear()', '30 0 0 1 1 ? *', '3', '1', '1', 'admin', '2022-02-06 06:09:44', '', NULL, '');
+
+-- ----------------------------
+-- Table structure for sys_job_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_job_log`;
+CREATE TABLE `sys_job_log`  (
+  `job_log_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务日志ID',
+  `job_name` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '任务名称',
+  `job_group` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '任务组名',
+  `invoke_target` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '调用目标字符串',
+  `job_message` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '日志信息',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '执行状态（0正常 1失败）',
+  `exception_info` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '异常信息',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  PRIMARY KEY (`job_log_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '定时任务调度日志表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_job_log
+-- ----------------------------
+INSERT INTO `sys_job_log` VALUES (1, '账单月度（生成）', 'DEFAULT', 'billTask.ryNoParamsByMonth()', '账单月度（生成） 总共耗时：274毫秒', '1', 'java.lang.reflect.InvocationTargetException\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at com.ruoyi.quartz.util.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:61)\r\n	at com.ruoyi.quartz.util.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:33)\r\n	at com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:19)\r\n	at com.ruoyi.quartz.util.AbstractQuartzJob.execute(AbstractQuartzJob.java:43)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: org.springframework.jdbc.BadSqlGrammarException: \r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'.7) = \'2022-01\' \n        group by d.user_id, d.type\' at line 5\r\n### The error may exist in file [D:\\VueProjects\\local-ruoyi\\ruoyi-local\\target\\classes\\mapper\\local\\BillDayMapper.xml]\r\n### The error may involve com.ruoyi.local.mapper.BillDayMapper.autoJobExecute-Inline\r\n### The error occurred while setting parameters\r\n### SQL: select d.user_id as userId,                d.type,                ifnull(format(sum(d.money),2),0) as money         from jz_bill_day d          WHERE  left(trim(d.date).7) = ?          group by d.user_id, d.type\r\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'.7) = \'2022-01\' \n        group by d.user_id, d.type\' at line 5\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check ', '2022-02-06 06:10:27');
+INSERT INTO `sys_job_log` VALUES (2, '账单月度（生成）', 'DEFAULT', 'billTask.ryNoParamsByMonth()', '账单月度（生成） 总共耗时：96毫秒', '1', 'java.lang.reflect.InvocationTargetException\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\r\n	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\r\n	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\r\n	at java.lang.reflect.Method.invoke(Method.java:498)\r\n	at com.ruoyi.quartz.util.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:61)\r\n	at com.ruoyi.quartz.util.JobInvokeUtil.invokeMethod(JobInvokeUtil.java:33)\r\n	at com.ruoyi.quartz.util.QuartzDisallowConcurrentExecution.doExecute(QuartzDisallowConcurrentExecution.java:19)\r\n	at com.ruoyi.quartz.util.AbstractQuartzJob.execute(AbstractQuartzJob.java:43)\r\n	at org.quartz.core.JobRunShell.run(JobRunShell.java:202)\r\n	at org.quartz.simpl.SimpleThreadPool$WorkerThread.run(SimpleThreadPool.java:573)\r\nCaused by: org.springframework.jdbc.BadSqlGrammarException: \r\n### Error querying database.  Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'.7) = \'2022-01\' \n        group by d.user_id, d.type\' at line 5\r\n### The error may exist in file [D:\\VueProjects\\local-ruoyi\\ruoyi-local\\target\\classes\\mapper\\local\\BillDayMapper.xml]\r\n### The error may involve com.ruoyi.local.mapper.BillDayMapper.autoJobExecute-Inline\r\n### The error occurred while setting parameters\r\n### SQL: select d.user_id as userId,                d.type,                ifnull(format(sum(d.money),2),0) as money         from jz_bill_day d          WHERE  left(trim(d.date).7) = ?          group by d.user_id, d.type\r\n### Cause: java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near \'.7) = \'2022-01\' \n        group by d.user_id, d.type\' at line 5\n; bad SQL grammar []; nested exception is java.sql.SQLSyntaxErrorException: You have an error in your SQL syntax; check ', '2022-02-06 06:14:02');
+INSERT INTO `sys_job_log` VALUES (3, '账单月度（生成）', 'DEFAULT', 'billTask.ryNoParamsByMonth()', '账单月度（生成） 总共耗时：184毫秒', '0', '', '2022-02-06 06:16:40');
+
+-- ----------------------------
+-- Table structure for sys_logininfor
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_logininfor`;
+CREATE TABLE `sys_logininfor`  (
+  `info_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '访问ID',
+  `user_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户账号',
+  `ipaddr` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '登录IP地址',
+  `login_location` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '登录地点',
+  `browser` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '浏览器类型',
+  `os` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '操作系统',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '登录状态（0成功 1失败）',
+  `msg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '提示消息',
+  `login_time` datetime NULL DEFAULT NULL COMMENT '访问时间',
+  PRIMARY KEY (`info_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 235 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '系统访问记录' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_logininfor
+-- ----------------------------
+INSERT INTO `sys_logininfor` VALUES (100, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 01:04:25');
+INSERT INTO `sys_logininfor` VALUES (101, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '用户不存在/密码错误', '2022-02-06 01:10:25');
+INSERT INTO `sys_logininfor` VALUES (102, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2022-02-06 01:10:31');
+INSERT INTO `sys_logininfor` VALUES (103, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 01:10:36');
+INSERT INTO `sys_logininfor` VALUES (104, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 01:18:41');
+INSERT INTO `sys_logininfor` VALUES (105, 'ry', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2022-02-06 01:19:00');
+INSERT INTO `sys_logininfor` VALUES (106, 'ry', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 01:19:06');
+INSERT INTO `sys_logininfor` VALUES (107, 'ry', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 01:34:45');
+INSERT INTO `sys_logininfor` VALUES (108, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 01:35:03');
+INSERT INTO `sys_logininfor` VALUES (109, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 02:25:42');
+INSERT INTO `sys_logininfor` VALUES (110, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '用户不存在/密码错误', '2022-02-06 02:26:02');
+INSERT INTO `sys_logininfor` VALUES (111, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 02:26:12');
+INSERT INTO `sys_logininfor` VALUES (112, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 02:36:19');
+INSERT INTO `sys_logininfor` VALUES (113, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 02:36:28');
+INSERT INTO `sys_logininfor` VALUES (114, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 02:46:31');
+INSERT INTO `sys_logininfor` VALUES (115, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 02:47:04');
+INSERT INTO `sys_logininfor` VALUES (116, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 02:55:35');
+INSERT INTO `sys_logininfor` VALUES (117, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 02:55:49');
+INSERT INTO `sys_logininfor` VALUES (118, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 03:20:11');
+INSERT INTO `sys_logininfor` VALUES (119, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 03:20:22');
+INSERT INTO `sys_logininfor` VALUES (120, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 03:41:16');
+INSERT INTO `sys_logininfor` VALUES (121, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 03:41:30');
+INSERT INTO `sys_logininfor` VALUES (122, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 03:56:20');
+INSERT INTO `sys_logininfor` VALUES (123, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 03:57:09');
+INSERT INTO `sys_logininfor` VALUES (124, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 04:06:11');
+INSERT INTO `sys_logininfor` VALUES (125, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 04:06:29');
+INSERT INTO `sys_logininfor` VALUES (126, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 04:22:42');
+INSERT INTO `sys_logininfor` VALUES (127, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 05:19:45');
+INSERT INTO `sys_logininfor` VALUES (128, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 05:19:51');
+INSERT INTO `sys_logininfor` VALUES (129, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 05:20:04');
+INSERT INTO `sys_logininfor` VALUES (130, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:05:37');
+INSERT INTO `sys_logininfor` VALUES (131, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:25:48');
+INSERT INTO `sys_logininfor` VALUES (132, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:26:31');
+INSERT INTO `sys_logininfor` VALUES (133, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:26:41');
+INSERT INTO `sys_logininfor` VALUES (134, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:27:10');
+INSERT INTO `sys_logininfor` VALUES (135, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:27:16');
+INSERT INTO `sys_logininfor` VALUES (136, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:28:18');
+INSERT INTO `sys_logininfor` VALUES (137, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:28:27');
+INSERT INTO `sys_logininfor` VALUES (138, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:29:41');
+INSERT INTO `sys_logininfor` VALUES (139, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:29:48');
+INSERT INTO `sys_logininfor` VALUES (140, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:29:53');
+INSERT INTO `sys_logininfor` VALUES (141, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:30:02');
+INSERT INTO `sys_logininfor` VALUES (142, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:30:32');
+INSERT INTO `sys_logininfor` VALUES (143, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:30:40');
+INSERT INTO `sys_logininfor` VALUES (144, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:33:18');
+INSERT INTO `sys_logininfor` VALUES (145, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:33:25');
+INSERT INTO `sys_logininfor` VALUES (146, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:36:07');
+INSERT INTO `sys_logininfor` VALUES (147, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:36:13');
+INSERT INTO `sys_logininfor` VALUES (148, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:38:39');
+INSERT INTO `sys_logininfor` VALUES (149, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:38:47');
+INSERT INTO `sys_logininfor` VALUES (150, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 06:38:56');
+INSERT INTO `sys_logininfor` VALUES (151, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 06:39:02');
+INSERT INTO `sys_logininfor` VALUES (152, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 07:02:38');
+INSERT INTO `sys_logininfor` VALUES (153, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 07:06:33');
+INSERT INTO `sys_logininfor` VALUES (154, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 07:06:50');
+INSERT INTO `sys_logininfor` VALUES (155, 'admin', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 07:07:13');
+INSERT INTO `sys_logininfor` VALUES (156, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 07:07:24');
+INSERT INTO `sys_logininfor` VALUES (157, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 07:24:48');
+INSERT INTO `sys_logininfor` VALUES (158, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 07:25:15');
+INSERT INTO `sys_logininfor` VALUES (159, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 08:00:33');
+INSERT INTO `sys_logininfor` VALUES (160, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 08:00:52');
+INSERT INTO `sys_logininfor` VALUES (161, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 08:00:59');
+INSERT INTO `sys_logininfor` VALUES (162, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 13:39:53');
+INSERT INTO `sys_logininfor` VALUES (163, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 13:40:49');
+INSERT INTO `sys_logininfor` VALUES (164, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 13:41:01');
+INSERT INTO `sys_logininfor` VALUES (165, 'cxw', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 13:43:14');
+INSERT INTO `sys_logininfor` VALUES (166, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 13:43:23');
+INSERT INTO `sys_logininfor` VALUES (167, 'admin', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 13:43:36');
+INSERT INTO `sys_logininfor` VALUES (168, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2022-02-06 13:45:13');
+INSERT INTO `sys_logininfor` VALUES (169, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '1', '用户不存在/密码错误', '2022-02-06 13:45:27');
+INSERT INTO `sys_logininfor` VALUES (170, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2022-02-06 13:45:36');
+INSERT INTO `sys_logininfor` VALUES (171, 'hww', '123.149.102.163', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 13:45:49');
+INSERT INTO `sys_logininfor` VALUES (172, 'admin', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 14:33:33');
+INSERT INTO `sys_logininfor` VALUES (173, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '1', '验证码错误', '2022-02-06 14:46:45');
+INSERT INTO `sys_logininfor` VALUES (174, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 14:46:50');
+INSERT INTO `sys_logininfor` VALUES (175, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 14:52:26');
+INSERT INTO `sys_logininfor` VALUES (176, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 14:54:07');
+INSERT INTO `sys_logininfor` VALUES (177, 'cxw', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 15:05:16');
+INSERT INTO `sys_logininfor` VALUES (178, 'cxw', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 15:05:45');
+INSERT INTO `sys_logininfor` VALUES (179, 'cxw', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 18:11:49');
+INSERT INTO `sys_logininfor` VALUES (180, 'cxw', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 19:14:12');
+INSERT INTO `sys_logininfor` VALUES (181, 'cxw', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 19:14:55');
+INSERT INTO `sys_logininfor` VALUES (182, 'admin', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 19:15:01');
+INSERT INTO `sys_logininfor` VALUES (183, 'admin', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 19:15:05');
+INSERT INTO `sys_logininfor` VALUES (184, 'hww', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-06 19:15:15');
+INSERT INTO `sys_logininfor` VALUES (185, 'hww', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-06 19:15:18');
+INSERT INTO `sys_logininfor` VALUES (186, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '1', '验证码已失效', '2022-02-07 08:38:03');
+INSERT INTO `sys_logininfor` VALUES (187, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 08:38:09');
+INSERT INTO `sys_logininfor` VALUES (188, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-07 08:39:25');
+INSERT INTO `sys_logininfor` VALUES (189, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 14:03:51');
+INSERT INTO `sys_logininfor` VALUES (190, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 14:57:56');
+INSERT INTO `sys_logininfor` VALUES (191, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 15:21:10');
+INSERT INTO `sys_logininfor` VALUES (192, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-07 15:21:32');
+INSERT INTO `sys_logininfor` VALUES (193, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 15:21:39');
+INSERT INTO `sys_logininfor` VALUES (194, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 15:57:02');
+INSERT INTO `sys_logininfor` VALUES (195, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 16:28:32');
+INSERT INTO `sys_logininfor` VALUES (196, 'hww', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 16:48:35');
+INSERT INTO `sys_logininfor` VALUES (197, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 17:22:51');
+INSERT INTO `sys_logininfor` VALUES (198, 'cxw', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 17:23:33');
+INSERT INTO `sys_logininfor` VALUES (199, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 18:47:33');
+INSERT INTO `sys_logininfor` VALUES (200, 'admin', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-07 23:59:42');
+INSERT INTO `sys_logininfor` VALUES (201, 'admin', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-08 00:39:23');
+INSERT INTO `sys_logininfor` VALUES (202, 'admin', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-08 01:22:00');
+INSERT INTO `sys_logininfor` VALUES (203, 'admin', '106.42.92.175', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-08 03:09:51');
+INSERT INTO `sys_logininfor` VALUES (204, 'cxw', '127.0.0.1', '内网IP', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-08 11:00:12');
+INSERT INTO `sys_logininfor` VALUES (205, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-08 12:39:53');
+INSERT INTO `sys_logininfor` VALUES (206, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-09 09:22:48');
+INSERT INTO `sys_logininfor` VALUES (207, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-09 14:48:02');
+INSERT INTO `sys_logininfor` VALUES (208, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-09 15:23:26');
+INSERT INTO `sys_logininfor` VALUES (209, 'hww', '42.236.205.200', 'XX XX', 'Chrome 9', 'Windows 7', '1', '用户不存在/密码错误', '2022-02-10 15:50:36');
+INSERT INTO `sys_logininfor` VALUES (210, 'hww', '42.236.205.200', 'XX XX', 'Chrome 9', 'Windows 7', '1', '用户不存在/密码错误', '2022-02-10 15:50:49');
+INSERT INTO `sys_logininfor` VALUES (211, 'hww', '42.236.205.200', 'XX XX', 'Chrome 9', 'Windows 7', '1', '验证码错误', '2022-02-10 15:50:53');
+INSERT INTO `sys_logininfor` VALUES (212, 'hww', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '用户不存在/密码错误', '2022-02-10 15:59:35');
+INSERT INTO `sys_logininfor` VALUES (213, 'hww', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '用户不存在/密码错误', '2022-02-10 15:59:39');
+INSERT INTO `sys_logininfor` VALUES (214, 'hww', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '用户不存在/密码错误', '2022-02-10 15:59:52');
+INSERT INTO `sys_logininfor` VALUES (215, 'hww', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '用户不存在/密码错误', '2022-02-10 16:00:13');
+INSERT INTO `sys_logininfor` VALUES (216, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '验证码错误', '2022-02-10 16:00:20');
+INSERT INTO `sys_logininfor` VALUES (217, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '验证码错误', '2022-02-10 16:00:22');
+INSERT INTO `sys_logininfor` VALUES (218, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '验证码错误', '2022-02-10 16:00:23');
+INSERT INTO `sys_logininfor` VALUES (219, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '验证码错误', '2022-02-10 16:00:23');
+INSERT INTO `sys_logininfor` VALUES (220, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '验证码错误', '2022-02-10 16:00:24');
+INSERT INTO `sys_logininfor` VALUES (221, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '验证码已失效', '2022-02-10 16:00:24');
+INSERT INTO `sys_logininfor` VALUES (222, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '验证码错误', '2022-02-10 16:00:24');
+INSERT INTO `sys_logininfor` VALUES (223, 'cxw', '182.118.236.86', 'XX XX', 'Chrome Mobile', 'Android 1.x', '1', '用户不存在/密码错误', '2022-02-10 16:00:25');
+INSERT INTO `sys_logininfor` VALUES (224, 'hww', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-10 16:02:08');
+INSERT INTO `sys_logininfor` VALUES (225, 'hww', '42.236.205.200', 'XX XX', 'Chrome 9', 'Windows 7', '1', '用户不存在/密码错误', '2022-02-10 16:05:37');
+INSERT INTO `sys_logininfor` VALUES (226, 'hww', '42.236.205.200', 'XX XX', 'Chrome 9', 'Windows 7', '1', '验证码错误', '2022-02-10 16:05:43');
+INSERT INTO `sys_logininfor` VALUES (227, 'hww', '42.236.205.200', 'XX XX', 'Chrome 9', 'Windows 7', '1', '用户不存在/密码错误', '2022-02-10 16:05:49');
+INSERT INTO `sys_logininfor` VALUES (228, 'cxw', '106.42.93.124', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-13 16:36:32');
+INSERT INTO `sys_logininfor` VALUES (229, 'cxw', '106.42.93.124', 'XX XX', 'Chrome 9', 'Windows 10', '0', '退出成功', '2022-02-13 16:57:54');
+INSERT INTO `sys_logininfor` VALUES (230, 'admin', '106.42.93.124', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-13 16:58:01');
+INSERT INTO `sys_logininfor` VALUES (231, 'admin', '112.45.166.35', 'XX XX', 'Chrome 9', 'Windows 10', '1', '用户不存在/密码错误', '2022-02-15 22:23:13');
+INSERT INTO `sys_logininfor` VALUES (232, 'admin', '112.45.166.35', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-15 22:23:20');
+INSERT INTO `sys_logininfor` VALUES (233, 'admin', '123.149.102.76', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-21 00:20:32');
+INSERT INTO `sys_logininfor` VALUES (234, 'admin', '218.28.35.120', 'XX XX', 'Chrome 9', 'Windows 10', '0', '登录成功', '2022-02-21 17:20:47');
+
+-- ----------------------------
+-- Table structure for sys_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_menu`;
+CREATE TABLE `sys_menu`  (
+  `menu_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
+  `menu_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '菜单名称',
+  `parent_id` bigint(20) NULL DEFAULT 0 COMMENT '父菜单ID',
+  `order_num` int(4) NULL DEFAULT 0 COMMENT '显示顺序',
+  `path` varchar(200) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '路由地址',
+  `component` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '组件路径',
+  `query` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '路由参数',
+  `is_frame` int(1) NULL DEFAULT 1 COMMENT '是否为外链（0是 1否）',
+  `is_cache` int(1) NULL DEFAULT 0 COMMENT '是否缓存（0缓存 1不缓存）',
+  `menu_type` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '菜单类型（M目录 C菜单 F按钮）',
+  `visible` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '菜单状态（0显示 1隐藏）',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '菜单状态（0正常 1停用）',
+  `perms` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '权限标识',
+  `icon` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '#' COMMENT '菜单图标',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '备注',
+  PRIMARY KEY (`menu_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 2035 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '菜单权限表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_menu
+-- ----------------------------
+INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 1, 'system', NULL, '', 1, 0, 'M', '0', '0', '', 'system', 'admin', '2022-02-06 00:58:11', '', NULL, '系统管理目录');
+INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 2, 'monitor', NULL, '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', '2022-02-06 00:58:11', '', NULL, '系统监控目录');
+INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, 'tool', NULL, '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', '2022-02-06 00:58:11', '', NULL, '系统工具目录');
+INSERT INTO `sys_menu` VALUES (4, '若依官网', 0, 4, 'http://ruoyi.vip', NULL, '', 0, 0, 'M', '0', '0', '', 'guide', 'admin', '2022-02-06 00:58:11', 'admin', '2022-02-09 15:24:25', '若依官网地址');
+INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '', 1, 0, 'C', '0', '0', 'system:user:list', 'user', 'admin', '2022-02-06 00:58:11', '', NULL, '用户管理菜单');
+INSERT INTO `sys_menu` VALUES (101, '角色管理', 1, 2, 'role', 'system/role/index', '', 1, 0, 'C', '0', '0', 'system:role:list', 'peoples', 'admin', '2022-02-06 00:58:11', '', NULL, '角色管理菜单');
+INSERT INTO `sys_menu` VALUES (102, '菜单管理', 1, 3, 'menu', 'system/menu/index', '', 1, 0, 'C', '0', '0', 'system:menu:list', 'tree-table', 'admin', '2022-02-06 00:58:11', '', NULL, '菜单管理菜单');
+INSERT INTO `sys_menu` VALUES (103, '部门管理', 1, 4, 'dept', 'system/dept/index', '', 1, 0, 'C', '0', '0', 'system:dept:list', 'tree', 'admin', '2022-02-06 00:58:11', '', NULL, '部门管理菜单');
+INSERT INTO `sys_menu` VALUES (104, '岗位管理', 1, 5, 'post', 'system/post/index', '', 1, 0, 'C', '0', '0', 'system:post:list', 'post', 'admin', '2022-02-06 00:58:11', '', NULL, '岗位管理菜单');
+INSERT INTO `sys_menu` VALUES (105, '字典管理', 1, 6, 'dict', 'system/dict/index', '', 1, 0, 'C', '0', '0', 'system:dict:list', 'dict', 'admin', '2022-02-06 00:58:11', '', NULL, '字典管理菜单');
+INSERT INTO `sys_menu` VALUES (106, '参数设置', 1, 7, 'config', 'system/config/index', '', 1, 0, 'C', '0', '0', 'system:config:list', 'edit', 'admin', '2022-02-06 00:58:11', '', NULL, '参数设置菜单');
+INSERT INTO `sys_menu` VALUES (107, '通知公告', 1, 8, 'notice', 'system/notice/index', '', 1, 0, 'C', '0', '0', 'system:notice:list', 'message', 'admin', '2022-02-06 00:58:11', '', NULL, '通知公告菜单');
+INSERT INTO `sys_menu` VALUES (108, '日志管理', 1, 9, 'log', '', '', 1, 0, 'M', '0', '0', '', 'log', 'admin', '2022-02-06 00:58:11', '', NULL, '日志管理菜单');
+INSERT INTO `sys_menu` VALUES (109, '在线用户', 2, 1, 'online', 'monitor/online/index', '', 1, 0, 'C', '0', '0', 'monitor:online:list', 'online', 'admin', '2022-02-06 00:58:11', '', NULL, '在线用户菜单');
+INSERT INTO `sys_menu` VALUES (110, '定时任务', 2, 2, 'job', 'monitor/job/index', '', 1, 0, 'C', '0', '0', 'monitor:job:list', 'job', 'admin', '2022-02-06 00:58:11', '', NULL, '定时任务菜单');
+INSERT INTO `sys_menu` VALUES (111, '数据监控', 2, 3, 'druid', 'monitor/druid/index', '', 1, 0, 'C', '0', '0', 'monitor:druid:list', 'druid', 'admin', '2022-02-06 00:58:11', '', NULL, '数据监控菜单');
+INSERT INTO `sys_menu` VALUES (112, '服务监控', 2, 4, 'server', 'monitor/server/index', '', 1, 0, 'C', '0', '0', 'monitor:server:list', 'server', 'admin', '2022-02-06 00:58:11', '', NULL, '服务监控菜单');
+INSERT INTO `sys_menu` VALUES (113, '缓存监控', 2, 5, 'cache', 'monitor/cache/index', '', 1, 0, 'C', '0', '0', 'monitor:cache:list', 'redis', 'admin', '2022-02-06 00:58:11', '', NULL, '缓存监控菜单');
+INSERT INTO `sys_menu` VALUES (114, '表单构建', 3, 1, 'build', 'tool/build/index', '', 1, 0, 'C', '0', '0', 'tool:build:list', 'build', 'admin', '2022-02-06 00:58:11', '', NULL, '表单构建菜单');
+INSERT INTO `sys_menu` VALUES (115, '代码生成', 3, 2, 'gen', 'tool/gen/index', '', 1, 0, 'C', '0', '0', 'tool:gen:list', 'code', 'admin', '2022-02-06 00:58:11', '', NULL, '代码生成菜单');
+INSERT INTO `sys_menu` VALUES (116, '系统接口', 3, 3, 'swagger', 'tool/swagger/index', '', 1, 0, 'C', '0', '0', 'tool:swagger:list', 'swagger', 'admin', '2022-02-06 00:58:11', '', NULL, '系统接口菜单');
+INSERT INTO `sys_menu` VALUES (500, '操作日志', 108, 1, 'operlog', 'monitor/operlog/index', '', 1, 0, 'C', '0', '0', 'monitor:operlog:list', 'form', 'admin', '2022-02-06 00:58:11', '', NULL, '操作日志菜单');
+INSERT INTO `sys_menu` VALUES (501, '登录日志', 108, 2, 'logininfor', 'monitor/logininfor/index', '', 1, 0, 'C', '0', '0', 'monitor:logininfor:list', 'logininfor', 'admin', '2022-02-06 00:58:11', '', NULL, '登录日志菜单');
+INSERT INTO `sys_menu` VALUES (1001, '用户查询', 100, 1, '', '', '', 1, 0, 'F', '0', '0', 'system:user:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1002, '用户新增', 100, 2, '', '', '', 1, 0, 'F', '0', '0', 'system:user:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1003, '用户修改', 100, 3, '', '', '', 1, 0, 'F', '0', '0', 'system:user:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1004, '用户删除', 100, 4, '', '', '', 1, 0, 'F', '0', '0', 'system:user:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1005, '用户导出', 100, 5, '', '', '', 1, 0, 'F', '0', '0', 'system:user:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1006, '用户导入', 100, 6, '', '', '', 1, 0, 'F', '0', '0', 'system:user:import', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1007, '重置密码', 100, 7, '', '', '', 1, 0, 'F', '0', '0', 'system:user:resetPwd', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1008, '角色查询', 101, 1, '', '', '', 1, 0, 'F', '0', '0', 'system:role:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1009, '角色新增', 101, 2, '', '', '', 1, 0, 'F', '0', '0', 'system:role:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1010, '角色修改', 101, 3, '', '', '', 1, 0, 'F', '0', '0', 'system:role:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1011, '角色删除', 101, 4, '', '', '', 1, 0, 'F', '0', '0', 'system:role:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1012, '角色导出', 101, 5, '', '', '', 1, 0, 'F', '0', '0', 'system:role:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1013, '菜单查询', 102, 1, '', '', '', 1, 0, 'F', '0', '0', 'system:menu:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1014, '菜单新增', 102, 2, '', '', '', 1, 0, 'F', '0', '0', 'system:menu:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1015, '菜单修改', 102, 3, '', '', '', 1, 0, 'F', '0', '0', 'system:menu:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1016, '菜单删除', 102, 4, '', '', '', 1, 0, 'F', '0', '0', 'system:menu:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1017, '部门查询', 103, 1, '', '', '', 1, 0, 'F', '0', '0', 'system:dept:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1018, '部门新增', 103, 2, '', '', '', 1, 0, 'F', '0', '0', 'system:dept:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1019, '部门修改', 103, 3, '', '', '', 1, 0, 'F', '0', '0', 'system:dept:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1020, '部门删除', 103, 4, '', '', '', 1, 0, 'F', '0', '0', 'system:dept:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1021, '岗位查询', 104, 1, '', '', '', 1, 0, 'F', '0', '0', 'system:post:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1022, '岗位新增', 104, 2, '', '', '', 1, 0, 'F', '0', '0', 'system:post:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1023, '岗位修改', 104, 3, '', '', '', 1, 0, 'F', '0', '0', 'system:post:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1024, '岗位删除', 104, 4, '', '', '', 1, 0, 'F', '0', '0', 'system:post:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1025, '岗位导出', 104, 5, '', '', '', 1, 0, 'F', '0', '0', 'system:post:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1026, '字典查询', 105, 1, '#', '', '', 1, 0, 'F', '0', '0', 'system:dict:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1027, '字典新增', 105, 2, '#', '', '', 1, 0, 'F', '0', '0', 'system:dict:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1028, '字典修改', 105, 3, '#', '', '', 1, 0, 'F', '0', '0', 'system:dict:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1029, '字典删除', 105, 4, '#', '', '', 1, 0, 'F', '0', '0', 'system:dict:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1030, '字典导出', 105, 5, '#', '', '', 1, 0, 'F', '0', '0', 'system:dict:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1031, '参数查询', 106, 1, '#', '', '', 1, 0, 'F', '0', '0', 'system:config:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1032, '参数新增', 106, 2, '#', '', '', 1, 0, 'F', '0', '0', 'system:config:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1033, '参数修改', 106, 3, '#', '', '', 1, 0, 'F', '0', '0', 'system:config:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1034, '参数删除', 106, 4, '#', '', '', 1, 0, 'F', '0', '0', 'system:config:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1035, '参数导出', 106, 5, '#', '', '', 1, 0, 'F', '0', '0', 'system:config:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1036, '公告查询', 107, 1, '#', '', '', 1, 0, 'F', '0', '0', 'system:notice:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1037, '公告新增', 107, 2, '#', '', '', 1, 0, 'F', '0', '0', 'system:notice:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1038, '公告修改', 107, 3, '#', '', '', 1, 0, 'F', '0', '0', 'system:notice:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1039, '公告删除', 107, 4, '#', '', '', 1, 0, 'F', '0', '0', 'system:notice:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1040, '操作查询', 500, 1, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:operlog:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1041, '操作删除', 500, 2, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:operlog:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1042, '日志导出', 500, 4, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:operlog:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1043, '登录查询', 501, 1, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:logininfor:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1044, '登录删除', 501, 2, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:logininfor:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1045, '日志导出', 501, 3, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:logininfor:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1046, '在线查询', 109, 1, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:online:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1047, '批量强退', 109, 2, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:online:batchLogout', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1048, '单条强退', 109, 3, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:online:forceLogout', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1049, '任务查询', 110, 1, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:job:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1050, '任务新增', 110, 2, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:job:add', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1051, '任务修改', 110, 3, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:job:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1052, '任务删除', 110, 4, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:job:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1053, '状态修改', 110, 5, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:job:changeStatus', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1054, '任务导出', 110, 7, '#', '', '', 1, 0, 'F', '0', '0', 'monitor:job:export', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1055, '生成查询', 115, 1, '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:query', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1056, '生成修改', 115, 2, '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:edit', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1057, '生成删除', 115, 3, '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:remove', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1058, '导入代码', 115, 2, '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:import', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1059, '预览代码', 115, 4, '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:preview', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (1060, '生成代码', 115, 5, '#', '', '', 1, 0, 'F', '0', '0', 'tool:gen:code', '#', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2000, '记账管理', 0, 0, 'bill', NULL, NULL, 1, 0, 'M', '0', '0', '', 'excel', 'ry', '2022-02-06 01:29:19', 'admin', '2022-02-09 09:27:27', '');
+INSERT INTO `sys_menu` VALUES (2001, '支出记账', 2016, 0, 'charge', 'local/day/index', NULL, 1, 0, 'C', '0', '0', 'local:day:list', 'guide', 'admin', '2022-02-06 01:38:42', 'admin', '2022-02-13 17:36:57', '日度账单菜单');
+INSERT INTO `sys_menu` VALUES (2002, '查询', 2001, 1, '#', '', NULL, 1, 0, 'F', '0', '0', 'local:day:query', '#', 'admin', '2022-02-06 01:38:42', 'admin', '2022-02-13 17:48:56', '');
+INSERT INTO `sys_menu` VALUES (2003, '新增', 2001, 2, '#', '', NULL, 1, 0, 'F', '0', '0', 'local:day:add', '#', 'admin', '2022-02-06 01:38:42', 'admin', '2022-02-13 17:49:03', '');
+INSERT INTO `sys_menu` VALUES (2004, '修改', 2001, 3, '#', '', NULL, 1, 0, 'F', '0', '0', 'local:day:edit', '#', 'admin', '2022-02-06 01:38:43', 'admin', '2022-02-13 17:49:12', '');
+INSERT INTO `sys_menu` VALUES (2005, '删除', 2001, 4, '#', '', NULL, 1, 0, 'F', '0', '0', 'local:day:remove', '#', 'admin', '2022-02-06 01:38:43', 'admin', '2022-02-13 17:49:18', '');
+INSERT INTO `sys_menu` VALUES (2006, '导出', 2001, 6, '#', '', NULL, 1, 0, 'F', '0', '0', 'local:day:export', '#', 'admin', '2022-02-06 01:38:43', 'admin', '2022-02-13 17:50:19', '');
+INSERT INTO `sys_menu` VALUES (2015, '收入', 2000, 0, 'income', NULL, NULL, 1, 0, 'M', '0', '0', '', 'money', 'admin', '2022-02-13 17:17:24', 'admin', '2022-02-13 17:28:41', '');
+INSERT INTO `sys_menu` VALUES (2016, '支出', 2000, 1, 'spending', NULL, NULL, 1, 0, 'M', '0', '0', '', 'shopping', 'admin', '2022-02-13 17:17:46', 'admin', '2022-02-13 17:29:00', '');
+INSERT INTO `sys_menu` VALUES (2017, '报表', 2000, 2, 'report', NULL, NULL, 1, 0, 'M', '0', '0', NULL, 'chart', 'admin', '2022-02-13 17:18:30', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2018, '对比分析', 2022, 0, 'contrast', NULL, NULL, 1, 0, 'M', '0', '0', '', 'list', 'admin', '2022-02-13 17:20:53', 'admin', '2022-02-13 17:32:07', '');
+INSERT INTO `sys_menu` VALUES (2019, '分类支出', 2022, 1, 'spendsorted', NULL, NULL, 1, 0, 'M', '0', '0', '', 'list', 'admin', '2022-02-13 17:22:04', 'admin', '2022-02-13 17:30:05', '');
+INSERT INTO `sys_menu` VALUES (2020, '月度报表', 2017, 1, 'month', NULL, NULL, 1, 0, 'M', '0', '0', '', 'chart', 'admin', '2022-02-13 17:23:24', 'admin', '2022-02-13 17:26:23', '');
+INSERT INTO `sys_menu` VALUES (2021, '年度报表', 2017, 2, 'year', NULL, NULL, 1, 0, 'M', '0', '0', '', 'chart', 'admin', '2022-02-13 17:23:51', 'admin', '2022-02-13 17:27:11', '');
+INSERT INTO `sys_menu` VALUES (2022, '日度报表', 2017, 0, 'day', NULL, NULL, 1, 0, 'M', '0', '0', '', 'chart', 'admin', '2022-02-13 17:24:39', 'admin', '2022-02-13 17:26:16', '');
+INSERT INTO `sys_menu` VALUES (2023, '对比分析', 2020, 0, 'contrast', NULL, NULL, 1, 0, 'M', '0', '0', NULL, 'list', 'admin', '2022-02-13 17:32:40', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2024, '对比分析', 2021, 0, 'contrast', NULL, NULL, 1, 0, 'M', '0', '0', NULL, 'list', 'admin', '2022-02-13 17:33:03', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2025, '分类支出', 2020, 1, 'spendsorted', NULL, NULL, 1, 0, 'M', '0', '0', NULL, 'list', 'admin', '2022-02-13 17:33:42', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2026, '分类支出', 2021, 1, 'spendsorted', NULL, NULL, 1, 0, 'M', '0', '0', NULL, 'list', 'admin', '2022-02-13 17:34:00', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2027, '收入记账', 2015, 0, 'charge', 'local/day/index', NULL, 1, 0, 'C', '0', '0', 'local:day:list', 'guide', 'admin', '2022-02-13 17:36:15', 'admin', '2022-02-13 17:55:04', '');
+INSERT INTO `sys_menu` VALUES (2028, '导入', 2001, 5, '', NULL, NULL, 1, 0, 'F', '0', '0', 'local:day:import', '#', 'admin', '2022-02-13 17:50:00', 'admin', '2022-02-13 17:50:46', '');
+INSERT INTO `sys_menu` VALUES (2029, '查询', 2027, 1, '', NULL, NULL, 1, 0, 'F', '0', '0', 'local:day:query', '#', 'admin', '2022-02-13 17:55:27', 'admin', '2022-02-13 17:56:10', '');
+INSERT INTO `sys_menu` VALUES (2030, '新增', 2027, 2, 'local:day:add', NULL, NULL, 1, 0, 'F', '0', '0', 'local:day:add', '#', 'admin', '2022-02-13 17:56:03', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2031, '修改', 2027, 3, '', NULL, NULL, 1, 0, 'F', '0', '0', 'local:day:edit', '#', 'admin', '2022-02-13 17:56:35', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2032, '删除', 2027, 4, '', NULL, NULL, 1, 0, 'F', '0', '0', 'local:day:remove', '#', 'admin', '2022-02-13 17:57:07', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2033, '导入', 2027, 5, '', NULL, NULL, 1, 0, 'F', '0', '0', 'local:day:import', '#', 'admin', '2022-02-13 17:57:27', '', NULL, '');
+INSERT INTO `sys_menu` VALUES (2034, '导出', 2027, 6, '', NULL, NULL, 1, 0, 'F', '0', '0', 'local:day:export', '#', 'admin', '2022-02-13 17:57:48', '', NULL, '');
+
+-- ----------------------------
+-- Table structure for sys_notice
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_notice`;
+CREATE TABLE `sys_notice`  (
+  `notice_id` int(4) NOT NULL AUTO_INCREMENT COMMENT '公告ID',
+  `notice_title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '公告标题',
+  `notice_type` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '公告类型（1通知 2公告）',
+  `notice_content` longblob NULL COMMENT '公告内容',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '公告状态（0正常 1关闭）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`notice_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '通知公告表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_notice
+-- ----------------------------
+INSERT INTO `sys_notice` VALUES (1, '温馨提醒：2018-07-01 若依新版本发布啦', '2', 0xE696B0E78988E69CACE58685E5AEB9, '0', 'admin', '2022-02-06 00:58:11', '', NULL, '管理员');
+INSERT INTO `sys_notice` VALUES (2, '维护通知：2018-07-01 若依系统凌晨维护', '1', 0xE7BBB4E68AA4E58685E5AEB9, '0', 'admin', '2022-02-06 00:58:11', '', NULL, '管理员');
+
+-- ----------------------------
+-- Table structure for sys_oper_log
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_oper_log`;
+CREATE TABLE `sys_oper_log`  (
+  `oper_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '日志主键',
+  `title` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '模块标题',
+  `business_type` int(2) NULL DEFAULT 0 COMMENT '业务类型（0其它 1新增 2修改 3删除）',
+  `method` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '方法名称',
+  `request_method` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '请求方式',
+  `operator_type` int(1) NULL DEFAULT 0 COMMENT '操作类别（0其它 1后台用户 2手机端用户）',
+  `oper_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '操作人员',
+  `dept_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '部门名称',
+  `oper_url` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '请求URL',
+  `oper_ip` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '主机地址',
+  `oper_location` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '操作地点',
+  `oper_param` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '请求参数',
+  `json_result` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '返回参数',
+  `status` int(1) NULL DEFAULT 0 COMMENT '操作状态（0正常 1异常）',
+  `error_msg` varchar(2000) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '错误消息',
+  `oper_time` datetime NULL DEFAULT NULL COMMENT '操作时间',
+  PRIMARY KEY (`oper_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 265 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '操作日志记录' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_oper_log
+-- ----------------------------
+INSERT INTO `sys_oper_log` VALUES (100, '在线用户', 7, 'com.ruoyi.web.controller.monitor.SysUserOnlineController.forceLogout()', 'DELETE', 1, 'admin', NULL, '/monitor/online/363238b7-1204-4d26-9eea-f187d5ea6a65', '123.149.102.163', 'XX XX', '{tokenId=363238b7-1204-4d26-9eea-f187d5ea6a65}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:04:17');
+INSERT INTO `sys_oper_log` VALUES (101, '在线用户', 7, 'com.ruoyi.web.controller.monitor.SysUserOnlineController.forceLogout()', 'DELETE', 1, 'admin', NULL, '/monitor/online/0eee68be-f06f-4ee7-a48a-19215cff8ec1', '123.149.102.163', 'XX XX', '{tokenId=0eee68be-f06f-4ee7-a48a-19215cff8ec1}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:04:33');
+INSERT INTO `sys_oper_log` VALUES (102, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'ry', NULL, '/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"excel\",\"orderNum\":\"0\",\"menuName\":\"记账管理\",\"params\":{},\"parentId\":0,\"isCache\":\"0\",\"path\":\"bill\",\"createBy\":\"ry\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:29:19');
+INSERT INTO `sys_oper_log` VALUES (103, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"1\",\"menuName\":\"日度账单\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"day\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2001,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:39:29');
+INSERT INTO `sys_oper_log` VALUES (104, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"1\",\"menuName\":\"每日记账\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"day\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2001,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:39:43');
+INSERT INTO `sys_oper_log` VALUES (105, '角色管理', 1, 'com.ruoyi.web.controller.system.SysRoleController.add()', 'POST', 1, 'admin', NULL, '/system/role', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"params\":{},\"roleSort\":\"2\",\"deptCheckStrictly\":true,\"createBy\":\"admin\",\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"deptIds\":[],\"menuIds\":[2000,2001,2002,2003,2004,2005,2006],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:40:32');
+INSERT INTO `sys_oper_log` VALUES (106, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', NULL, '/system/role', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"dataScope\":\"1\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"3\",\"deptCheckStrictly\":true,\"createTime\":1644082832000,\"updateBy\":\"admin\",\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"menuIds\":[2000,2001,2002,2003,2004,2005,2006],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:40:40');
+INSERT INTO `sys_oper_log` VALUES (107, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', NULL, '/system/user', '127.0.0.1', '内网IP', '{\"phonenumber\":\"15649865121\",\"admin\":false,\"password\":\"$2a$10$GSwR8RplBd5Hsb/EaZ.pluhSvS/rqP37bdKtvUbJ/OPKBQFd6qq5O\",\"postIds\":[4],\"nickName\":\"cxw\",\"sex\":\"0\",\"deptId\":100,\"params\":{},\"userName\":\"cxw\",\"userId\":100,\"createBy\":\"admin\",\"roleIds\":[100],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:41:15');
+INSERT INTO `sys_oper_log` VALUES (108, '用户管理', 1, 'com.ruoyi.web.controller.system.SysUserController.add()', 'POST', 1, 'admin', NULL, '/system/user', '127.0.0.1', '内网IP', '{\"phonenumber\":\"15690846023\",\"admin\":false,\"password\":\"$2a$10$QjvTR7rUjUzmdzfjEPW1HuyLeATpsaQEpm1G6HYMh8DeMUk3f0pju\",\"postIds\":[4],\"nickName\":\"hww\",\"sex\":\"1\",\"deptId\":100,\"params\":{},\"userName\":\"hww\",\"userId\":101,\"createBy\":\"admin\",\"roleIds\":[100],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:41:40');
+INSERT INTO `sys_oper_log` VALUES (109, '字典类型', 1, 'com.ruoyi.web.controller.system.SysDictTypeController.add()', 'POST', 1, 'admin', NULL, '/system/dict/type', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"dictName\":\"账单类型\",\"params\":{},\"dictType\":\"BillType\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:51:01');
+INSERT INTO `sys_oper_log` VALUES (110, '字典类型', 1, 'com.ruoyi.web.controller.system.SysDictTypeController.add()', 'POST', 1, 'admin', NULL, '/system/dict/type', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"dictName\":\"支付方式\",\"params\":{},\"dictType\":\"PayWay\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:51:20');
+INSERT INTO `sys_oper_log` VALUES (111, '字典类型', 1, 'com.ruoyi.web.controller.system.SysDictTypeController.add()', 'POST', 1, 'admin', NULL, '/system/dict/type', '127.0.0.1', '内网IP', '{\"createBy\":\"admin\",\"dictName\":\"支付类型\",\"params\":{},\"dictType\":\"PayType\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:51:35');
+INSERT INTO `sys_oper_log` VALUES (112, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"01\",\"listClass\":\"default\",\"dictSort\":0,\"params\":{},\"dictType\":\"BillType\",\"dictLabel\":\"收入\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:52:20');
+INSERT INTO `sys_oper_log` VALUES (113, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"02\",\"listClass\":\"default\",\"dictSort\":1,\"params\":{},\"dictType\":\"BillType\",\"dictLabel\":\"支出\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:52:30');
+INSERT INTO `sys_oper_log` VALUES (114, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"01\",\"listClass\":\"default\",\"dictSort\":0,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"微信\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:53:11');
+INSERT INTO `sys_oper_log` VALUES (115, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"02\",\"listClass\":\"default\",\"dictSort\":1,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"支付宝\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:53:33');
+INSERT INTO `sys_oper_log` VALUES (116, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"03\",\"listClass\":\"default\",\"dictSort\":2,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"银行卡\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:53:44');
+INSERT INTO `sys_oper_log` VALUES (117, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"04\",\"listClass\":\"default\",\"dictSort\":3,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"现金\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:53:58');
+INSERT INTO `sys_oper_log` VALUES (118, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"01\",\"listClass\":\"default\",\"dictSort\":0,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"电费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:54:22');
+INSERT INTO `sys_oper_log` VALUES (119, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"02\",\"listClass\":\"default\",\"dictSort\":1,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"水费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:54:30');
+INSERT INTO `sys_oper_log` VALUES (120, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"03\",\"listClass\":\"default\",\"dictSort\":2,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"房租\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:54:42');
+INSERT INTO `sys_oper_log` VALUES (121, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"04\",\"listClass\":\"default\",\"dictSort\":3,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"通讯费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:55:33');
+INSERT INTO `sys_oper_log` VALUES (122, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"05\",\"listClass\":\"default\",\"dictSort\":4,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"蔬果费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:57:00');
+INSERT INTO `sys_oper_log` VALUES (123, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"06\",\"listClass\":\"default\",\"dictSort\":5,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"电影票\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:57:48');
+INSERT INTO `sys_oper_log` VALUES (124, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"07\",\"listClass\":\"default\",\"dictSort\":6,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"交通费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:58:14');
+INSERT INTO `sys_oper_log` VALUES (125, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"08\",\"listClass\":\"default\",\"dictSort\":7,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"外卖费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:58:29');
+INSERT INTO `sys_oper_log` VALUES (126, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"09\",\"listClass\":\"default\",\"dictSort\":8,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"买饭费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 01:59:23');
+INSERT INTO `sys_oper_log` VALUES (127, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"10\",\"listClass\":\"default\",\"dictSort\":9,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"零食费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:00:16');
+INSERT INTO `sys_oper_log` VALUES (128, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"11\",\"listClass\":\"default\",\"dictSort\":10,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"生活用品\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:00:40');
+INSERT INTO `sys_oper_log` VALUES (129, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"12\",\"listClass\":\"default\",\"dictSort\":12,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"其它杂费\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:01:34');
+INSERT INTO `sys_oper_log` VALUES (130, '字典数据', 2, 'com.ruoyi.web.controller.system.SysDictDataController.edit()', 'PUT', 1, 'admin', NULL, '/system/dict/data', '127.0.0.1', '内网IP', '{\"dictValue\":\"12\",\"listClass\":\"default\",\"dictSort\":11,\"params\":{},\"dictType\":\"PayType\",\"dictLabel\":\"其它杂费\",\"createBy\":\"admin\",\"default\":false,\"isDefault\":\"N\",\"createTime\":1644084094000,\"dictCode\":117,\"updateBy\":\"admin\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:01:41');
+INSERT INTO `sys_oper_log` VALUES (131, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'admin', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-05\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"payType\":\"09\",\"money\":20,\"createTime\":1644084148660,\"id\":\"1444d39e76da4ddf8c1b8b2fc8c04a77\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:02:29');
+INSERT INTO `sys_oper_log` VALUES (132, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'admin', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-05\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":\"admin\",\"payType\":\"09\",\"money\":20,\"id\":\"169c650c04c74a66b33a2fc93cb4ce3b\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:19:15');
+INSERT INTO `sys_oper_log` VALUES (133, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', NULL, '/system/role', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"dataScope\":\"1\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"3\",\"deptCheckStrictly\":true,\"createTime\":1644082832000,\"updateBy\":\"admin\",\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"menuIds\":[2000,2001,2002,2003,2004],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:25:06');
+INSERT INTO `sys_oper_log` VALUES (134, '日度账单', 3, 'com.ruoyi.local.controller.BillDayController.remove()', 'DELETE', 1, 'admin', NULL, '/local/day/169c650c04c74a66b33a2fc93cb4ce3b', '127.0.0.1', '内网IP', '{ids=169c650c04c74a66b33a2fc93cb4ce3b}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:25:31');
+INSERT INTO `sys_oper_log` VALUES (135, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-05\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":\"cxw\",\"payType\":\"09\",\"money\":20,\"details\":\"热干面7\\n麻辣烫13\",\"id\":\"6a0e566a4c314ad9909314f85883a168\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:27:03');
+INSERT INTO `sys_oper_log` VALUES (136, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-02\",\"payWay\":\"02\",\"params\":{},\"type\":\"01\",\"userId\":\"cxw\",\"payType\":\"02\",\"money\":30,\"id\":\"a64ab4ca45204baea654fbd2cd892b0f\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:41:45');
+INSERT INTO `sys_oper_log` VALUES (137, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-01\",\"payWay\":\"01\",\"params\":{},\"userId\":\"cxw\",\"payType\":\"03\",\"money\":30,\"id\":\"27165ae0a92f4072bc09287149d62a24\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:41:59');
+INSERT INTO `sys_oper_log` VALUES (138, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-01\",\"params\":{},\"userId\":\"cxw\",\"id\":\"01a073d5e9004a4fa9c7c10c86d94b42\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:42:06');
+INSERT INTO `sys_oper_log` VALUES (139, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-02\",\"params\":{},\"userId\":\"cxw\",\"id\":\"e638e700369b47fb8c73234d9d800112\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:42:12');
+INSERT INTO `sys_oper_log` VALUES (140, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-01\",\"params\":{},\"userId\":\"cxw\",\"id\":\"73e81118402a4e62b2a13f2ef611b23c\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:42:17');
+INSERT INTO `sys_oper_log` VALUES (141, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-01\",\"params\":{},\"userId\":\"cxw\",\"id\":\"b5cb9212f1344435a7da11404e2f0c9b\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:42:22');
+INSERT INTO `sys_oper_log` VALUES (142, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-02\",\"params\":{},\"userId\":\"cxw\",\"id\":\"fa86718c56c747a38bd17d125698e846\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:42:27');
+INSERT INTO `sys_oper_log` VALUES (143, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-02\",\"params\":{},\"userId\":\"cxw\",\"id\":\"45223bbce74a4e64ad75ae4e0ddd889f\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:42:32');
+INSERT INTO `sys_oper_log` VALUES (144, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '127.0.0.1', '内网IP', '{\"date\":\"2022-02-03\",\"params\":{},\"userId\":\"cxw\",\"id\":\"8254d1f74c4c49478fcd6329bbaef65b\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 02:42:36');
+INSERT INTO `sys_oper_log` VALUES (145, '代码生成', 6, 'com.ruoyi.generator.controller.GenController.importTableSave()', 'POST', 1, 'admin', NULL, '/tool/gen/importTable', '123.149.102.163', 'XX XX', 'jz_bill_month,jz_bill_year', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 04:23:29');
+INSERT INTO `sys_oper_log` VALUES (146, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', NULL, '/tool/gen', '123.149.102.163', 'XX XX', '{\"sub\":false,\"functionAuthor\":\"local\",\"columns\":[{\"capJavaField\":\"Id\",\"usableColumn\":false,\"columnId\":1,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"id\",\"htmlType\":\"input\",\"edit\":false,\"query\":false,\"columnComment\":\"主键\",\"sort\":1,\"list\":false,\"params\":{},\"javaType\":\"String\",\"queryType\":\"EQ\",\"columnType\":\"varchar(32)\",\"createBy\":\"admin\",\"isPk\":\"1\",\"createTime\":1644092609000,\"tableId\":1,\"pk\":true,\"columnName\":\"id\"},{\"capJavaField\":\"Month\",\"usableColumn\":false,\"columnId\":2,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"isList\":\"1\",\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"month\",\"htmlType\":\"datetime\",\"edit\":false,\"query\":true,\"columnComment\":\"账单月份，yyyy-MM\",\"isQuery\":\"1\",\"sort\":2,\"list\":true,\"params\":{},\"javaType\":\"String\",\"queryType\":\"EQ\",\"columnType\":\"varchar(7)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1644092609000,\"tableId\":1,\"pk\":false,\"columnName\":\"month\"},{\"capJavaField\":\"Money\",\"usableColumn\":false,\"columnId\":3,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"isList\":\"1\",\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"money\",\"htmlType\":\"input\",\"edit\":false,\"query\":false,\"columnComment\":\"账单金额，2位小数\",\"sort\":3,\"list\":true,\"params\":{},\"javaType\":\"BigDecimal\",\"queryType\":\"EQ\",\"columnType\":\"decimal(14,2)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1644092609000,\"tableId\":1,\"pk\":false,\"columnName\":\"money\"},{\"capJavaField\":\"Type\",\"usableColumn\":false,\"columnId\":4,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"isList\":\"1\",\"dictType\":\"BillType\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"type\",\"htmlType\":\"select\",\"edit\":false,\"query\":true,\"columnComment\":\"账单类型，01:：收入，02：支出\",\"isQuery\":\"1\",\"sort\":4,\"list\":true,\"params\":{},\"javaType\":\"String\",\"queryType\":\"EQ\",\"columnType\":\"varchar(2)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1644092609000,\"tableId\":1,\"pk\":false,\"columnName\":\"type\"},{\"capJavaF', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 04:25:51');
+INSERT INTO `sys_oper_log` VALUES (147, '代码生成', 2, 'com.ruoyi.generator.controller.GenController.editSave()', 'PUT', 1, 'admin', NULL, '/tool/gen', '123.149.102.163', 'XX XX', '{\"sub\":false,\"functionAuthor\":\"local\",\"columns\":[{\"capJavaField\":\"Id\",\"usableColumn\":false,\"columnId\":7,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"id\",\"htmlType\":\"input\",\"edit\":false,\"query\":false,\"columnComment\":\"主键\",\"sort\":1,\"list\":false,\"params\":{},\"javaType\":\"String\",\"queryType\":\"EQ\",\"columnType\":\"varchar(32)\",\"createBy\":\"admin\",\"isPk\":\"1\",\"createTime\":1644092609000,\"tableId\":2,\"pk\":true,\"columnName\":\"id\"},{\"capJavaField\":\"Year\",\"usableColumn\":false,\"columnId\":8,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"isList\":\"1\",\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"year\",\"htmlType\":\"datetime\",\"edit\":false,\"query\":true,\"columnComment\":\"账单年份，yyyy\",\"isQuery\":\"1\",\"sort\":2,\"list\":true,\"params\":{},\"javaType\":\"String\",\"queryType\":\"EQ\",\"columnType\":\"varchar(4)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1644092609000,\"tableId\":2,\"pk\":false,\"columnName\":\"year\"},{\"capJavaField\":\"Money\",\"usableColumn\":false,\"columnId\":9,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"isList\":\"1\",\"dictType\":\"\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"money\",\"htmlType\":\"input\",\"edit\":false,\"query\":false,\"columnComment\":\"账单金额，2位小数\",\"sort\":3,\"list\":true,\"params\":{},\"javaType\":\"BigDecimal\",\"queryType\":\"EQ\",\"columnType\":\"decimal(14,2)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1644092609000,\"tableId\":2,\"pk\":false,\"columnName\":\"money\"},{\"capJavaField\":\"Type\",\"usableColumn\":false,\"columnId\":10,\"isIncrement\":\"0\",\"increment\":false,\"insert\":false,\"isList\":\"1\",\"dictType\":\"BillType\",\"required\":false,\"superColumn\":false,\"updateBy\":\"\",\"javaField\":\"type\",\"htmlType\":\"select\",\"edit\":false,\"query\":true,\"columnComment\":\"账单类型，01:：收入，02：支出\",\"isQuery\":\"1\",\"sort\":4,\"list\":true,\"params\":{},\"javaType\":\"String\",\"queryType\":\"EQ\",\"columnType\":\"varchar(2)\",\"createBy\":\"admin\",\"isPk\":\"0\",\"createTime\":1644092609000,\"tableId\":2,\"pk\":false,\"columnName\":\"type\"},{\"capJavaField\"', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 04:26:38');
+INSERT INTO `sys_oper_log` VALUES (148, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', NULL, '/tool/gen/batchGenCode', '123.149.102.163', 'XX XX', '{}', NULL, 0, NULL, '2022-02-06 04:26:40');
+INSERT INTO `sys_oper_log` VALUES (149, '代码生成', 8, 'com.ruoyi.generator.controller.GenController.batchGenCode()', 'GET', 1, 'admin', NULL, '/tool/gen/batchGenCode', '123.149.102.163', 'XX XX', '{}', NULL, 0, NULL, '2022-02-06 04:27:44');
+INSERT INTO `sys_oper_log` VALUES (150, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"1\",\"menuName\":\"月度账单\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"month\",\"component\":\"local/month/index\",\"children\":[],\"createTime\":1644095682000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2007,\"menuType\":\"C\",\"perms\":\"local:month:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 05:21:14');
+INSERT INTO `sys_oper_log` VALUES (151, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"1\",\"menuName\":\"月度账单\",\"params\":{},\"parentId\":2000,\"isCache\":\"1\",\"path\":\"month\",\"component\":\"local/month/index\",\"children\":[],\"createTime\":1644095682000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2007,\"menuType\":\"C\",\"perms\":\"local:month:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 05:21:24');
+INSERT INTO `sys_oper_log` VALUES (152, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '127.0.0.1', '内网IP', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"1\",\"menuName\":\"年度账单\",\"params\":{},\"parentId\":2000,\"isCache\":\"1\",\"path\":\"year\",\"component\":\"local/year/index\",\"children\":[],\"createTime\":1644095708000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2011,\"menuType\":\"C\",\"perms\":\"local:year:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 05:21:32');
+INSERT INTO `sys_oper_log` VALUES (153, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', NULL, '/system/role', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"dataScope\":\"1\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"3\",\"deptCheckStrictly\":true,\"createTime\":1644082832000,\"updateBy\":\"admin\",\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"menuIds\":[2000,2001,2007,2011,2002,2003,2004,2008,2012],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:06:32');
+INSERT INTO `sys_oper_log` VALUES (154, '定时任务', 1, 'com.ruoyi.quartz.controller.SysJobController.add()', 'POST', 1, 'admin', NULL, '/monitor/job', '127.0.0.1', '内网IP', '{\"jobName\":\"账单月度\",\"concurrent\":\"1\",\"jobGroup\":\"DEFAULT\",\"params\":{},\"cronExpression\":\"0 0 0 1 * ?\",\"jobId\":100,\"createBy\":\"admin\",\"nextValidTime\":1646064000000,\"invokeTarget\":\"billTask.ryNoParamsByMonth()\",\"misfirePolicy\":\"3\",\"status\":\"1\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:08:45');
+INSERT INTO `sys_oper_log` VALUES (155, '定时任务', 1, 'com.ruoyi.quartz.controller.SysJobController.add()', 'POST', 1, 'admin', NULL, '/monitor/job', '127.0.0.1', '内网IP', '{\"jobName\":\"账单年度（生成）\",\"concurrent\":\"1\",\"jobGroup\":\"DEFAULT\",\"params\":{},\"cronExpression\":\"30 0 0 1 1 ? *\",\"jobId\":101,\"createBy\":\"admin\",\"nextValidTime\":1672502430000,\"invokeTarget\":\"billTask.ryNoParamsByYear()\",\"misfirePolicy\":\"3\",\"status\":\"1\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:09:45');
+INSERT INTO `sys_oper_log` VALUES (156, '定时任务', 2, 'com.ruoyi.quartz.controller.SysJobController.edit()', 'PUT', 1, 'admin', NULL, '/monitor/job', '127.0.0.1', '内网IP', '{\"jobName\":\"账单月度（生成）\",\"concurrent\":\"1\",\"remark\":\"\",\"jobGroup\":\"DEFAULT\",\"params\":{},\"cronExpression\":\"0 0 0 1 * ?\",\"jobId\":100,\"createBy\":\"admin\",\"nextValidTime\":1646064000000,\"createTime\":1644098924000,\"updateBy\":\"admin\",\"invokeTarget\":\"billTask.ryNoParamsByMonth()\",\"misfirePolicy\":\"3\",\"status\":\"1\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:09:55');
+INSERT INTO `sys_oper_log` VALUES (157, '定时任务', 2, 'com.ruoyi.quartz.controller.SysJobController.run()', 'PUT', 1, 'admin', NULL, '/monitor/job/run', '127.0.0.1', '内网IP', '{\"jobGroup\":\"DEFAULT\",\"params\":{},\"jobId\":100,\"misfirePolicy\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:10:26');
+INSERT INTO `sys_oper_log` VALUES (158, '定时任务', 2, 'com.ruoyi.quartz.controller.SysJobController.run()', 'PUT', 1, 'admin', NULL, '/monitor/job/run', '127.0.0.1', '内网IP', '{\"jobGroup\":\"DEFAULT\",\"params\":{},\"jobId\":100,\"misfirePolicy\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:14:01');
+INSERT INTO `sys_oper_log` VALUES (159, '定时任务', 2, 'com.ruoyi.quartz.controller.SysJobController.run()', 'PUT', 1, 'admin', NULL, '/monitor/job/run', '127.0.0.1', '内网IP', '{\"jobGroup\":\"DEFAULT\",\"params\":{},\"jobId\":100,\"misfirePolicy\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:16:39');
+INSERT INTO `sys_oper_log` VALUES (160, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '123.149.102.163', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"每日记账\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"day\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2001,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:26:59');
+INSERT INTO `sys_oper_log` VALUES (161, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '123.149.102.163', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"2\",\"menuName\":\"年度账单\",\"params\":{},\"parentId\":2000,\"isCache\":\"1\",\"path\":\"year\",\"component\":\"local/year/index\",\"children\":[],\"createTime\":1644095708000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2011,\"menuType\":\"C\",\"perms\":\"local:year:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:27:05');
+INSERT INTO `sys_oper_log` VALUES (162, '用户头像', 2, 'com.ruoyi.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'cxw', NULL, '/system/user/profile/avatar', '123.149.102.163', 'XX XX', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2022/02/06/9dc655f0-ee37-402a-a4ba-d32777944a17.jpeg\",\"code\":200}', 0, NULL, '2022-02-06 06:29:31');
+INSERT INTO `sys_oper_log` VALUES (163, '日度账单', 5, 'com.ruoyi.local.controller.BillDayController.export()', 'POST', 1, 'admin', NULL, '/local/day/export', '123.149.102.163', 'XX XX', '{}', NULL, 0, NULL, '2022-02-06 06:33:03');
+INSERT INTO `sys_oper_log` VALUES (164, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', NULL, '/system/role/dataScope', '123.149.102.163', 'XX XX', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"dataScope\":\"5\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"3\",\"deptCheckStrictly\":true,\"createTime\":1644082832000,\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"deptIds\":[],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 06:37:46');
+INSERT INTO `sys_oper_log` VALUES (165, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.dataScope()', 'PUT', 1, 'admin', NULL, '/system/role/dataScope', '127.0.0.1', '内网IP', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"dataScope\":\"5\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"3\",\"deptCheckStrictly\":true,\"createTime\":1644082832000,\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"deptIds\":[],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 07:07:03');
+INSERT INTO `sys_oper_log` VALUES (166, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '123.149.102.163', 'XX XX', '{\"date\":\"2022-02-06\",\"payWay\":\"03\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"12\",\"money\":2.12,\"details\":\"摄像头电源\",\"id\":\"fdea9f35dea5433a8a7c7435a0262af4\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-06 13:42:46');
+INSERT INTO `sys_oper_log` VALUES (167, '用户头像', 2, 'com.ruoyi.web.controller.system.SysProfileController.avatar()', 'POST', 1, 'cxw', NULL, '/system/user/profile/avatar', '106.42.92.175', 'XX XX', '', '{\"msg\":\"操作成功\",\"imgUrl\":\"/profile/avatar/2022/02/06/eca0d060-761d-43e3-ab7b-b07e42f6c04e.jpeg\",\"code\":200}', 0, NULL, '2022-02-06 19:14:50');
+INSERT INTO `sys_oper_log` VALUES (168, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '218.28.35.120', 'XX XX', '{\"date\":\"2022-02-07\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"09\",\"money\":5,\"details\":\"水煎包3\\n粥2\",\"id\":\"106e1332b9344203a00366b7b008a3d0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-07 08:39:15');
+INSERT INTO `sys_oper_log` VALUES (169, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '218.28.35.120', 'XX XX', '{\"date\":\"2022-02-07\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"08\",\"money\":21.4,\"details\":\"茄汁面21.4\",\"id\":\"2183d83e9b31402792f0fcee4d6b07ee\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-07 14:04:44');
+INSERT INTO `sys_oper_log` VALUES (170, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', NULL, '/system/role', '218.28.35.120', 'XX XX', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"dataScope\":\"5\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"3\",\"deptCheckStrictly\":true,\"createTime\":1644082832000,\"updateBy\":\"admin\",\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"menuIds\":[2000,2001,2007,2011,2002,2003,2008,2012],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-07 15:21:28');
+INSERT INTO `sys_oper_log` VALUES (171, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'hww', NULL, '/local/day', '106.42.92.175', 'XX XX', '{\"date\":\"2022-02-07\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":101,\"payType\":\"12\",\"money\":9,\"details\":\"黑色笔芯盒装*1\",\"id\":\"3a1cc5b6441e49138723a6b039a42300\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-07 16:50:33');
+INSERT INTO `sys_oper_log` VALUES (172, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'hww', NULL, '/local/day', '106.42.92.175', 'XX XX', '{\"date\":\"2022-02-07\",\"payWay\":\"03\",\"params\":{},\"type\":\"02\",\"userId\":101,\"payType\":\"12\",\"money\":40,\"details\":\"公务员真题套装*1\",\"id\":\"1226b5ac32374a1d8df94a57e0d49487\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-07 16:52:02');
+INSERT INTO `sys_oper_log` VALUES (173, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '218.28.35.120', 'XX XX', '{\"visible\":\"1\",\"icon\":\"excel\",\"orderNum\":\"0\",\"menuName\":\"记账管理\",\"params\":{},\"parentId\":0,\"isCache\":\"0\",\"path\":\"bill\",\"children\":[],\"createTime\":1644082159000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2000,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-09 09:23:19');
+INSERT INTO `sys_oper_log` VALUES (174, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '218.28.35.120', 'XX XX', '{\"visible\":\"0\",\"icon\":\"excel\",\"orderNum\":\"0\",\"menuName\":\"记账管理\",\"params\":{},\"parentId\":0,\"isCache\":\"0\",\"path\":\"bill\",\"children\":[],\"createTime\":1644082159000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2000,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-09 09:23:32');
+INSERT INTO `sys_oper_log` VALUES (175, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '218.28.35.120', 'XX XX', '{\"visible\":\"0\",\"icon\":\"excel\",\"orderNum\":\"0\",\"menuName\":\"记账管理\",\"params\":{},\"parentId\":0,\"isCache\":\"0\",\"path\":\"bill\",\"children\":[],\"createTime\":1644082159000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2000,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"1\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-09 09:27:01');
+INSERT INTO `sys_oper_log` VALUES (176, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '218.28.35.120', 'XX XX', '{\"visible\":\"0\",\"icon\":\"excel\",\"orderNum\":\"0\",\"menuName\":\"记账管理\",\"params\":{},\"parentId\":0,\"isCache\":\"0\",\"path\":\"bill\",\"children\":[],\"createTime\":1644082159000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2000,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-09 09:27:27');
+INSERT INTO `sys_oper_log` VALUES (177, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '218.28.35.120', 'XX XX', '{\"visible\":\"0\",\"query\":\"\",\"icon\":\"guide\",\"orderNum\":\"4\",\"menuName\":\"若依官网\",\"params\":{},\"parentId\":0,\"isCache\":\"0\",\"path\":\"http://ruoyi.vip\",\"children\":[],\"createTime\":1644080291000,\"updateBy\":\"admin\",\"isFrame\":\"0\",\"menuId\":4,\"menuType\":\"C\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-09 15:24:09');
+INSERT INTO `sys_oper_log` VALUES (178, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '218.28.35.120', 'XX XX', '{\"visible\":\"0\",\"query\":\"\",\"icon\":\"guide\",\"orderNum\":\"4\",\"menuName\":\"若依官网\",\"params\":{},\"parentId\":0,\"isCache\":\"0\",\"path\":\"http://ruoyi.vip\",\"children\":[],\"createTime\":1644080291000,\"updateBy\":\"admin\",\"isFrame\":\"0\",\"menuId\":4,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-09 15:24:25');
+INSERT INTO `sys_oper_log` VALUES (179, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-08\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"09\",\"money\":3,\"details\":\"早餐\",\"id\":\"dea5f419faf94de2b3df2681a78cbc24\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:38:39');
+INSERT INTO `sys_oper_log` VALUES (180, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-09\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"09\",\"money\":20,\"details\":\"小火锅16\\n早餐3\",\"id\":\"dab4d5bec2204c5c8cdaaed80c5e3426\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:41:41');
+INSERT INTO `sys_oper_log` VALUES (181, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-09\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"09\",\"money\":4,\"details\":\"炸鸡4\",\"id\":\"2749e7c52ee74c369468c3b3372af20f\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:42:27');
+INSERT INTO `sys_oper_log` VALUES (182, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-10\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"09\",\"money\":13,\"details\":\"早餐3\\n午餐5\\n烧饼5\",\"id\":\"4d6d94e264ce4290928e29b1cb16860b\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:43:38');
+INSERT INTO `sys_oper_log` VALUES (183, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-10\",\"payWay\":\"02\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"08\",\"money\":19.9,\"details\":\"茄汁面19.9\",\"id\":\"0a9f9c9ebad14bf193572db44b6db8de\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:44:09');
+INSERT INTO `sys_oper_log` VALUES (184, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-11\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"09\",\"money\":18,\"details\":\"早餐3\\n小火锅15\",\"id\":\"0a82d64e652d47e0aafbef4b4efbf8e9\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:44:52');
+INSERT INTO `sys_oper_log` VALUES (185, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-12\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"09\",\"money\":13,\"details\":\"早餐3\\n烧饼5\\n串串5\",\"id\":\"198cdec762b54e838d4de76e1cb53e39\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:46:21');
+INSERT INTO `sys_oper_log` VALUES (186, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-12\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"11\",\"money\":15.99,\"details\":\"拼多多 手抓饼15.99\",\"id\":\"8f14e5664f7c41a0842f2d688690391a\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:48:01');
+INSERT INTO `sys_oper_log` VALUES (187, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-12\",\"payWay\":\"03\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"11\",\"money\":25.6,\"details\":\"美团优选 25.6\",\"id\":\"6f9b4c87dbf847a8b97130ce20ff28cc\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:48:56');
+INSERT INTO `sys_oper_log` VALUES (188, '日度账单', 1, 'com.ruoyi.local.controller.BillDayController.add()', 'POST', 1, 'cxw', NULL, '/local/day', '106.42.93.124', 'XX XX', '{\"date\":\"2022-02-13\",\"payWay\":\"01\",\"params\":{},\"type\":\"02\",\"userId\":100,\"payType\":\"11\",\"money\":31.5,\"details\":\"拼多多厨房置物架31.5\",\"id\":\"82bab0f29f09407c9ea02fb15f05811f\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:49:43');
+INSERT INTO `sys_oper_log` VALUES (189, '字典数据', 2, 'com.ruoyi.web.controller.system.SysDictDataController.edit()', 'PUT', 1, 'admin', NULL, '/system/dict/data', '106.42.93.124', 'XX XX', '{\"dictValue\":\"01\",\"listClass\":\"default\",\"dictSort\":0,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"手机\",\"createBy\":\"admin\",\"default\":false,\"isDefault\":\"N\",\"createTime\":1644083591000,\"dictCode\":102,\"updateBy\":\"admin\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 16:59:49');
+INSERT INTO `sys_oper_log` VALUES (190, '字典数据', 2, 'com.ruoyi.web.controller.system.SysDictDataController.edit()', 'PUT', 1, 'admin', NULL, '/system/dict/data', '106.42.93.124', 'XX XX', '{\"dictValue\":\"02\",\"listClass\":\"default\",\"dictSort\":1,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"现金\",\"createBy\":\"admin\",\"default\":false,\"isDefault\":\"N\",\"createTime\":1644083613000,\"dictCode\":103,\"updateBy\":\"admin\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:00:02');
+INSERT INTO `sys_oper_log` VALUES (191, '字典类型', 3, 'com.ruoyi.web.controller.system.SysDictDataController.remove()', 'DELETE', 1, 'admin', NULL, '/system/dict/data/105', '106.42.93.124', 'XX XX', '{dictCodes=105}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:00:05');
+INSERT INTO `sys_oper_log` VALUES (192, '字典类型', 3, 'com.ruoyi.web.controller.system.SysDictDataController.remove()', 'DELETE', 1, 'admin', NULL, '/system/dict/data/104', '106.42.93.124', 'XX XX', '{dictCodes=104}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:00:08');
+INSERT INTO `sys_oper_log` VALUES (193, '字典数据', 2, 'com.ruoyi.web.controller.system.SysDictDataController.edit()', 'PUT', 1, 'admin', NULL, '/system/dict/data', '106.42.93.124', 'XX XX', '{\"dictValue\":\"01\",\"listClass\":\"default\",\"dictSort\":0,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"微信\",\"createBy\":\"admin\",\"default\":false,\"isDefault\":\"N\",\"createTime\":1644083591000,\"dictCode\":102,\"updateBy\":\"admin\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:15:06');
+INSERT INTO `sys_oper_log` VALUES (194, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"0\",\"menuName\":\"收入\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"income\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:17:24');
+INSERT INTO `sys_oper_log` VALUES (195, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"1\",\"menuName\":\"支出\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"outcome\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:17:46');
+INSERT INTO `sys_oper_log` VALUES (196, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"2\",\"menuName\":\"报表\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"report\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:18:30');
+INSERT INTO `sys_oper_log` VALUES (197, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"每日记账\",\"params\":{},\"parentId\":2015,\"isCache\":\"0\",\"path\":\"day\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2001,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:18:47');
+INSERT INTO `sys_oper_log` VALUES (198, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"1\",\"menuName\":\"月度账单\",\"params\":{},\"parentId\":2016,\"isCache\":\"1\",\"path\":\"month\",\"component\":\"local/month/index\",\"children\":[],\"createTime\":1644095682000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2007,\"menuType\":\"C\",\"perms\":\"local:month:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:19:21');
+INSERT INTO `sys_oper_log` VALUES (199, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"2\",\"menuName\":\"年度账单\",\"params\":{},\"parentId\":2016,\"isCache\":\"1\",\"path\":\"year\",\"component\":\"local/year/index\",\"children\":[],\"createTime\":1644095708000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2011,\"menuType\":\"C\",\"perms\":\"local:year:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:19:28');
+INSERT INTO `sys_oper_log` VALUES (200, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"0\",\"menuName\":\"收入支出对比图\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report_1\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:20:53');
+INSERT INTO `sys_oper_log` VALUES (201, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"每日记账\",\"params\":{},\"parentId\":2016,\"isCache\":\"0\",\"path\":\"day\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2001,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:21:13');
+INSERT INTO `sys_oper_log` VALUES (202, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"0\",\"menuName\":\"收入支出\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report_1\",\"children\":[],\"createTime\":1644744053000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2018,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:21:34');
+INSERT INTO `sys_oper_log` VALUES (203, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"1\",\"menuName\":\"分类支出\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report1\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:22:04');
+INSERT INTO `sys_oper_log` VALUES (204, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"0\",\"menuName\":\"月度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"month/report\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:23:24');
+INSERT INTO `sys_oper_log` VALUES (205, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"1\",\"menuName\":\"年度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report/year\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:23:51');
+INSERT INTO `sys_oper_log` VALUES (206, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"0\",\"menuName\":\"月度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report/month\",\"children\":[],\"createTime\":1644744204000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2020,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:24:08');
+INSERT INTO `sys_oper_log` VALUES (207, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"0\",\"menuName\":\"日度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report/day\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:24:39');
+INSERT INTO `sys_oper_log` VALUES (208, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"1\",\"menuName\":\"月度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report/month\",\"children\":[],\"createTime\":1644744204000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2020,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:24:46');
+INSERT INTO `sys_oper_log` VALUES (209, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"2\",\"menuName\":\"年度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"report/year\",\"children\":[],\"createTime\":1644744231000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2021,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:24:51');
+INSERT INTO `sys_oper_log` VALUES (210, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"0\",\"menuName\":\"收入支出\",\"params\":{},\"parentId\":2022,\"isCache\":\"0\",\"path\":\"report_1\",\"children\":[],\"createTime\":1644744053000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2018,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:25:12');
+INSERT INTO `sys_oper_log` VALUES (211, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"1\",\"menuName\":\"分类支出\",\"params\":{},\"parentId\":2022,\"isCache\":\"0\",\"path\":\"report1\",\"children\":[],\"createTime\":1644744124000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2019,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:25:20');
+INSERT INTO `sys_oper_log` VALUES (212, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"0\",\"menuName\":\"对比分析\",\"params\":{},\"parentId\":2022,\"isCache\":\"0\",\"path\":\"report_1\",\"children\":[],\"createTime\":1644744053000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2018,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:25:46');
+INSERT INTO `sys_oper_log` VALUES (213, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"0\",\"menuName\":\"日度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"day\",\"children\":[],\"createTime\":1644744279000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2022,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:26:16');
+INSERT INTO `sys_oper_log` VALUES (214, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"1\",\"menuName\":\"月度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"month\",\"children\":[],\"createTime\":1644744204000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2020,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:26:23');
+INSERT INTO `sys_oper_log` VALUES (215, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"chart\",\"orderNum\":\"2\",\"menuName\":\"年度报表\",\"params\":{},\"parentId\":2017,\"isCache\":\"0\",\"path\":\"year\",\"children\":[],\"createTime\":1644744231000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2021,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:27:11');
+INSERT INTO `sys_oper_log` VALUES (216, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"1\",\"menuName\":\"支出\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"spending\",\"children\":[],\"createTime\":1644743866000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2016,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:27:35');
+INSERT INTO `sys_oper_log` VALUES (217, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"number\",\"orderNum\":\"0\",\"menuName\":\"收入\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"income\",\"children\":[],\"createTime\":1644743844000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2015,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:28:27');
+INSERT INTO `sys_oper_log` VALUES (218, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"money\",\"orderNum\":\"0\",\"menuName\":\"收入\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"income\",\"children\":[],\"createTime\":1644743844000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2015,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:28:41');
+INSERT INTO `sys_oper_log` VALUES (219, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"shopping\",\"orderNum\":\"1\",\"menuName\":\"支出\",\"params\":{},\"parentId\":2000,\"isCache\":\"0\",\"path\":\"spending\",\"children\":[],\"createTime\":1644743866000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2016,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:29:00');
+INSERT INTO `sys_oper_log` VALUES (220, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"1\",\"menuName\":\"分类支出\",\"params\":{},\"parentId\":2022,\"isCache\":\"0\",\"path\":\"spendsorted\",\"children\":[],\"createTime\":1644744124000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2019,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:29:38');
+INSERT INTO `sys_oper_log` VALUES (221, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"list\",\"orderNum\":\"1\",\"menuName\":\"分类支出\",\"params\":{},\"parentId\":2022,\"isCache\":\"0\",\"path\":\"spendsorted\",\"children\":[],\"createTime\":1644744124000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2019,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:30:05');
+INSERT INTO `sys_oper_log` VALUES (222, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"0\",\"menuName\":\"对比分析\",\"params\":{},\"parentId\":2022,\"isCache\":\"0\",\"path\":\"contrast\",\"children\":[],\"createTime\":1644744053000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2018,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:31:04');
+INSERT INTO `sys_oper_log` VALUES (223, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"list\",\"orderNum\":\"0\",\"menuName\":\"对比分析\",\"params\":{},\"parentId\":2022,\"isCache\":\"0\",\"path\":\"contrast\",\"children\":[],\"createTime\":1644744053000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2018,\"menuType\":\"M\",\"perms\":\"\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:32:07');
+INSERT INTO `sys_oper_log` VALUES (224, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"list\",\"orderNum\":\"0\",\"menuName\":\"对比分析\",\"params\":{},\"parentId\":2020,\"isCache\":\"0\",\"path\":\"contrast\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:32:40');
+INSERT INTO `sys_oper_log` VALUES (225, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"list\",\"orderNum\":\"0\",\"menuName\":\"对比分析\",\"params\":{},\"parentId\":2021,\"isCache\":\"0\",\"path\":\"contrast\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:33:03');
+INSERT INTO `sys_oper_log` VALUES (226, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"list\",\"orderNum\":\"1\",\"menuName\":\"分类支出\",\"params\":{},\"parentId\":2020,\"isCache\":\"0\",\"path\":\"spendsorted\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:33:42');
+INSERT INTO `sys_oper_log` VALUES (227, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"list\",\"orderNum\":\"1\",\"menuName\":\"分类支出\",\"params\":{},\"parentId\":2021,\"isCache\":\"0\",\"path\":\"spendsorted\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:34:00');
+INSERT INTO `sys_oper_log` VALUES (228, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"收入记账\",\"params\":{},\"parentId\":2015,\"isCache\":\"0\",\"path\":\"charge\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"M\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:36:15');
+INSERT INTO `sys_oper_log` VALUES (229, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"支出记账\",\"params\":{},\"parentId\":2016,\"isCache\":\"0\",\"path\":\"day\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2001,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:36:43');
+INSERT INTO `sys_oper_log` VALUES (230, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"支出记账\",\"params\":{},\"parentId\":2016,\"isCache\":\"0\",\"path\":\"charge\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2001,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:36:57');
+INSERT INTO `sys_oper_log` VALUES (231, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2007', '106.42.93.124', 'XX XX', '{menuId=2007}', '{\"msg\":\"存在子菜单,不允许删除\",\"code\":500}', 0, NULL, '2022-02-13 17:43:10');
+INSERT INTO `sys_oper_log` VALUES (232, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2008', '106.42.93.124', 'XX XX', '{menuId=2008}', '{\"msg\":\"菜单已分配,不允许删除\",\"code\":500}', 0, NULL, '2022-02-13 17:43:14');
+INSERT INTO `sys_oper_log` VALUES (233, '角色管理', 2, 'com.ruoyi.web.controller.system.SysRoleController.edit()', 'PUT', 1, 'admin', NULL, '/system/role', '106.42.93.124', 'XX XX', '{\"flag\":false,\"roleId\":100,\"admin\":false,\"dataScope\":\"5\",\"delFlag\":\"0\",\"params\":{},\"roleSort\":\"3\",\"deptCheckStrictly\":true,\"createTime\":1644082832000,\"updateBy\":\"admin\",\"menuCheckStrictly\":true,\"roleKey\":\"bill\",\"roleName\":\"记账人员\",\"menuIds\":[2000,2015,2027,2017,2022,2018,2019,2020,2023,2025,2021,2024,2026],\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:44:25');
+INSERT INTO `sys_oper_log` VALUES (234, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2007', '106.42.93.124', 'XX XX', '{menuId=2007}', '{\"msg\":\"存在子菜单,不允许删除\",\"code\":500}', 0, NULL, '2022-02-13 17:45:54');
+INSERT INTO `sys_oper_log` VALUES (235, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2008', '106.42.93.124', 'XX XX', '{menuId=2008}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:30');
+INSERT INTO `sys_oper_log` VALUES (236, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2009', '106.42.93.124', 'XX XX', '{menuId=2009}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:33');
+INSERT INTO `sys_oper_log` VALUES (237, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2010', '106.42.93.124', 'XX XX', '{menuId=2010}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:36');
+INSERT INTO `sys_oper_log` VALUES (238, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2007', '106.42.93.124', 'XX XX', '{menuId=2007}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:39');
+INSERT INTO `sys_oper_log` VALUES (239, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2012', '106.42.93.124', 'XX XX', '{menuId=2012}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:44');
+INSERT INTO `sys_oper_log` VALUES (240, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2013', '106.42.93.124', 'XX XX', '{menuId=2013}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:47');
+INSERT INTO `sys_oper_log` VALUES (241, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2014', '106.42.93.124', 'XX XX', '{menuId=2014}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:49');
+INSERT INTO `sys_oper_log` VALUES (242, '菜单管理', 3, 'com.ruoyi.web.controller.system.SysMenuController.remove()', 'DELETE', 1, 'admin', NULL, '/system/menu/2011', '106.42.93.124', 'XX XX', '{menuId=2011}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:47:53');
+INSERT INTO `sys_oper_log` VALUES (243, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"1\",\"menuName\":\"查询\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"#\",\"component\":\"\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2002,\"menuType\":\"F\",\"perms\":\"local:day:query\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:48:56');
+INSERT INTO `sys_oper_log` VALUES (244, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"2\",\"menuName\":\"新增\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"#\",\"component\":\"\",\"children\":[],\"createTime\":1644082722000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2003,\"menuType\":\"F\",\"perms\":\"local:day:add\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:49:04');
+INSERT INTO `sys_oper_log` VALUES (245, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"3\",\"menuName\":\"修改\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"#\",\"component\":\"\",\"children\":[],\"createTime\":1644082723000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2004,\"menuType\":\"F\",\"perms\":\"local:day:edit\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:49:12');
+INSERT INTO `sys_oper_log` VALUES (246, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"4\",\"menuName\":\"删除\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"#\",\"component\":\"\",\"children\":[],\"createTime\":1644082723000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2005,\"menuType\":\"F\",\"perms\":\"local:day:remove\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:49:18');
+INSERT INTO `sys_oper_log` VALUES (247, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"5\",\"menuName\":\"导出\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"#\",\"component\":\"\",\"children\":[],\"createTime\":1644082723000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2006,\"menuType\":\"F\",\"perms\":\"local:day:export\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:49:25');
+INSERT INTO `sys_oper_log` VALUES (248, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"4\",\"menuName\":\"导入\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"F\",\"perms\":\"import\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:50:00');
+INSERT INTO `sys_oper_log` VALUES (249, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"5\",\"menuName\":\"导入\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"\",\"children\":[],\"createTime\":1644745800000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2028,\"menuType\":\"F\",\"perms\":\"import\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:50:12');
+INSERT INTO `sys_oper_log` VALUES (250, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"6\",\"menuName\":\"导出\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"#\",\"component\":\"\",\"children\":[],\"createTime\":1644082723000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2006,\"menuType\":\"F\",\"perms\":\"local:day:export\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:50:19');
+INSERT INTO `sys_oper_log` VALUES (251, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"5\",\"menuName\":\"导入\",\"params\":{},\"parentId\":2001,\"isCache\":\"0\",\"path\":\"\",\"children\":[],\"createTime\":1644745800000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2028,\"menuType\":\"F\",\"perms\":\"local:day:import\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:50:46');
+INSERT INTO `sys_oper_log` VALUES (252, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"收入记账\",\"params\":{},\"parentId\":2015,\"isCache\":\"0\",\"path\":\"charge\",\"component\":\"local/day/\",\"children\":[],\"createTime\":1644744975000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2027,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:54:54');
+INSERT INTO `sys_oper_log` VALUES (253, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"guide\",\"orderNum\":\"0\",\"menuName\":\"收入记账\",\"params\":{},\"parentId\":2015,\"isCache\":\"0\",\"path\":\"charge\",\"component\":\"local/day/index\",\"children\":[],\"createTime\":1644744975000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2027,\"menuType\":\"C\",\"perms\":\"local:day:list\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:55:04');
+INSERT INTO `sys_oper_log` VALUES (254, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"0\",\"menuName\":\"查询\",\"params\":{},\"parentId\":2027,\"isCache\":\"0\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"F\",\"perms\":\"local:day:query\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:55:27');
+INSERT INTO `sys_oper_log` VALUES (255, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"2\",\"menuName\":\"新增\",\"params\":{},\"parentId\":2027,\"isCache\":\"0\",\"path\":\"local:day:add\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"F\",\"perms\":\"local:day:add\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:56:03');
+INSERT INTO `sys_oper_log` VALUES (256, '菜单管理', 2, 'com.ruoyi.web.controller.system.SysMenuController.edit()', 'PUT', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"icon\":\"#\",\"orderNum\":\"1\",\"menuName\":\"查询\",\"params\":{},\"parentId\":2027,\"isCache\":\"0\",\"path\":\"\",\"children\":[],\"createTime\":1644746127000,\"updateBy\":\"admin\",\"isFrame\":\"1\",\"menuId\":2029,\"menuType\":\"F\",\"perms\":\"local:day:query\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:56:10');
+INSERT INTO `sys_oper_log` VALUES (257, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"3\",\"menuName\":\"修改\",\"params\":{},\"parentId\":2027,\"isCache\":\"0\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"F\",\"perms\":\"local:day:edit\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:56:35');
+INSERT INTO `sys_oper_log` VALUES (258, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"4\",\"menuName\":\"删除\",\"params\":{},\"parentId\":2027,\"isCache\":\"0\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"F\",\"perms\":\"local:day:remove\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:57:07');
+INSERT INTO `sys_oper_log` VALUES (259, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"5\",\"menuName\":\"导入\",\"params\":{},\"parentId\":2027,\"isCache\":\"0\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"F\",\"perms\":\"local:day:import\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:57:27');
+INSERT INTO `sys_oper_log` VALUES (260, '菜单管理', 1, 'com.ruoyi.web.controller.system.SysMenuController.add()', 'POST', 1, 'admin', NULL, '/system/menu', '106.42.93.124', 'XX XX', '{\"visible\":\"0\",\"orderNum\":\"6\",\"menuName\":\"导出\",\"params\":{},\"parentId\":2027,\"isCache\":\"0\",\"createBy\":\"admin\",\"children\":[],\"isFrame\":\"1\",\"menuType\":\"F\",\"perms\":\"local:day:export\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 17:57:48');
+INSERT INTO `sys_oper_log` VALUES (261, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '106.42.93.124', 'XX XX', '{\"dictValue\":\"03\",\"listClass\":\"default\",\"dictSort\":2,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"支付宝\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 18:02:22');
+INSERT INTO `sys_oper_log` VALUES (262, '字典数据', 1, 'com.ruoyi.web.controller.system.SysDictDataController.add()', 'POST', 1, 'admin', NULL, '/system/dict/data', '106.42.93.124', 'XX XX', '{\"dictValue\":\"04\",\"listClass\":\"default\",\"dictSort\":3,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"银行卡\",\"createBy\":\"admin\",\"default\":false,\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 18:02:42');
+INSERT INTO `sys_oper_log` VALUES (263, '字典数据', 2, 'com.ruoyi.web.controller.system.SysDictDataController.edit()', 'PUT', 1, 'admin', NULL, '/system/dict/data', '106.42.93.124', 'XX XX', '{\"dictValue\":\"01\",\"listClass\":\"default\",\"dictSort\":0,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"现金\",\"createBy\":\"admin\",\"default\":false,\"isDefault\":\"N\",\"createTime\":1644083591000,\"dictCode\":102,\"updateBy\":\"admin\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 18:02:58');
+INSERT INTO `sys_oper_log` VALUES (264, '字典数据', 2, 'com.ruoyi.web.controller.system.SysDictDataController.edit()', 'PUT', 1, 'admin', NULL, '/system/dict/data', '106.42.93.124', 'XX XX', '{\"dictValue\":\"02\",\"listClass\":\"default\",\"dictSort\":1,\"params\":{},\"dictType\":\"PayWay\",\"dictLabel\":\"微信\",\"createBy\":\"admin\",\"default\":false,\"isDefault\":\"N\",\"createTime\":1644083613000,\"dictCode\":103,\"updateBy\":\"admin\",\"status\":\"0\"}', '{\"msg\":\"操作成功\",\"code\":200}', 0, NULL, '2022-02-13 18:03:04');
+
+-- ----------------------------
+-- Table structure for sys_post
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_post`;
+CREATE TABLE `sys_post`  (
+  `post_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '岗位ID',
+  `post_code` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '岗位编码',
+  `post_name` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '岗位名称',
+  `post_sort` int(4) NOT NULL COMMENT '显示顺序',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '状态（0正常 1停用）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`post_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '岗位信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_post
+-- ----------------------------
+INSERT INTO `sys_post` VALUES (1, 'ceo', '董事长', 1, '0', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_post` VALUES (2, 'se', '项目经理', 2, '0', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_post` VALUES (3, 'hr', '人力资源', 3, '0', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+INSERT INTO `sys_post` VALUES (4, 'user', '普通员工', 4, '0', 'admin', '2022-02-06 00:58:11', '', NULL, '');
+
+-- ----------------------------
+-- Table structure for sys_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role`;
+CREATE TABLE `sys_role`  (
+  `role_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+  `role_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
+  `role_key` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色权限字符串',
+  `role_sort` int(4) NOT NULL COMMENT '显示顺序',
+  `data_scope` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '1' COMMENT '数据范围（1：全部数据权限 2：自定数据权限 3：本部门数据权限 4：本部门及以下数据权限）',
+  `menu_check_strictly` tinyint(1) NULL DEFAULT 1 COMMENT '菜单树选择项是否关联显示',
+  `dept_check_strictly` tinyint(1) NULL DEFAULT 1 COMMENT '部门树选择项是否关联显示',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`role_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 101 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_role
+-- ----------------------------
+INSERT INTO `sys_role` VALUES (1, '超级管理员', 'admin', 1, '1', 1, 1, '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '超级管理员');
+INSERT INTO `sys_role` VALUES (2, '普通角色', 'common', 2, '2', 1, 1, '0', '0', 'admin', '2022-02-06 00:58:11', '', NULL, '普通角色');
+INSERT INTO `sys_role` VALUES (100, '记账人员', 'bill', 3, '5', 1, 1, '0', '0', 'admin', '2022-02-06 01:40:32', 'admin', '2022-02-13 17:44:25', NULL);
+
+-- ----------------------------
+-- Table structure for sys_role_dept
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_dept`;
+CREATE TABLE `sys_role_dept`  (
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  `dept_id` bigint(20) NOT NULL COMMENT '部门ID',
+  PRIMARY KEY (`role_id`, `dept_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色和部门关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_role_dept
+-- ----------------------------
+INSERT INTO `sys_role_dept` VALUES (2, 100);
+INSERT INTO `sys_role_dept` VALUES (2, 101);
+INSERT INTO `sys_role_dept` VALUES (2, 105);
+
+-- ----------------------------
+-- Table structure for sys_role_menu
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_role_menu`;
+CREATE TABLE `sys_role_menu`  (
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  `menu_id` bigint(20) NOT NULL COMMENT '菜单ID',
+  PRIMARY KEY (`role_id`, `menu_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '角色和菜单关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_role_menu
+-- ----------------------------
+INSERT INTO `sys_role_menu` VALUES (2, 1);
+INSERT INTO `sys_role_menu` VALUES (2, 2);
+INSERT INTO `sys_role_menu` VALUES (2, 3);
+INSERT INTO `sys_role_menu` VALUES (2, 4);
+INSERT INTO `sys_role_menu` VALUES (2, 100);
+INSERT INTO `sys_role_menu` VALUES (2, 101);
+INSERT INTO `sys_role_menu` VALUES (2, 102);
+INSERT INTO `sys_role_menu` VALUES (2, 103);
+INSERT INTO `sys_role_menu` VALUES (2, 104);
+INSERT INTO `sys_role_menu` VALUES (2, 105);
+INSERT INTO `sys_role_menu` VALUES (2, 106);
+INSERT INTO `sys_role_menu` VALUES (2, 107);
+INSERT INTO `sys_role_menu` VALUES (2, 108);
+INSERT INTO `sys_role_menu` VALUES (2, 109);
+INSERT INTO `sys_role_menu` VALUES (2, 110);
+INSERT INTO `sys_role_menu` VALUES (2, 111);
+INSERT INTO `sys_role_menu` VALUES (2, 112);
+INSERT INTO `sys_role_menu` VALUES (2, 113);
+INSERT INTO `sys_role_menu` VALUES (2, 114);
+INSERT INTO `sys_role_menu` VALUES (2, 115);
+INSERT INTO `sys_role_menu` VALUES (2, 116);
+INSERT INTO `sys_role_menu` VALUES (2, 500);
+INSERT INTO `sys_role_menu` VALUES (2, 501);
+INSERT INTO `sys_role_menu` VALUES (2, 1000);
+INSERT INTO `sys_role_menu` VALUES (2, 1001);
+INSERT INTO `sys_role_menu` VALUES (2, 1002);
+INSERT INTO `sys_role_menu` VALUES (2, 1003);
+INSERT INTO `sys_role_menu` VALUES (2, 1004);
+INSERT INTO `sys_role_menu` VALUES (2, 1005);
+INSERT INTO `sys_role_menu` VALUES (2, 1006);
+INSERT INTO `sys_role_menu` VALUES (2, 1007);
+INSERT INTO `sys_role_menu` VALUES (2, 1008);
+INSERT INTO `sys_role_menu` VALUES (2, 1009);
+INSERT INTO `sys_role_menu` VALUES (2, 1010);
+INSERT INTO `sys_role_menu` VALUES (2, 1011);
+INSERT INTO `sys_role_menu` VALUES (2, 1012);
+INSERT INTO `sys_role_menu` VALUES (2, 1013);
+INSERT INTO `sys_role_menu` VALUES (2, 1014);
+INSERT INTO `sys_role_menu` VALUES (2, 1015);
+INSERT INTO `sys_role_menu` VALUES (2, 1016);
+INSERT INTO `sys_role_menu` VALUES (2, 1017);
+INSERT INTO `sys_role_menu` VALUES (2, 1018);
+INSERT INTO `sys_role_menu` VALUES (2, 1019);
+INSERT INTO `sys_role_menu` VALUES (2, 1020);
+INSERT INTO `sys_role_menu` VALUES (2, 1021);
+INSERT INTO `sys_role_menu` VALUES (2, 1022);
+INSERT INTO `sys_role_menu` VALUES (2, 1023);
+INSERT INTO `sys_role_menu` VALUES (2, 1024);
+INSERT INTO `sys_role_menu` VALUES (2, 1025);
+INSERT INTO `sys_role_menu` VALUES (2, 1026);
+INSERT INTO `sys_role_menu` VALUES (2, 1027);
+INSERT INTO `sys_role_menu` VALUES (2, 1028);
+INSERT INTO `sys_role_menu` VALUES (2, 1029);
+INSERT INTO `sys_role_menu` VALUES (2, 1030);
+INSERT INTO `sys_role_menu` VALUES (2, 1031);
+INSERT INTO `sys_role_menu` VALUES (2, 1032);
+INSERT INTO `sys_role_menu` VALUES (2, 1033);
+INSERT INTO `sys_role_menu` VALUES (2, 1034);
+INSERT INTO `sys_role_menu` VALUES (2, 1035);
+INSERT INTO `sys_role_menu` VALUES (2, 1036);
+INSERT INTO `sys_role_menu` VALUES (2, 1037);
+INSERT INTO `sys_role_menu` VALUES (2, 1038);
+INSERT INTO `sys_role_menu` VALUES (2, 1039);
+INSERT INTO `sys_role_menu` VALUES (2, 1040);
+INSERT INTO `sys_role_menu` VALUES (2, 1041);
+INSERT INTO `sys_role_menu` VALUES (2, 1042);
+INSERT INTO `sys_role_menu` VALUES (2, 1043);
+INSERT INTO `sys_role_menu` VALUES (2, 1044);
+INSERT INTO `sys_role_menu` VALUES (2, 1045);
+INSERT INTO `sys_role_menu` VALUES (2, 1046);
+INSERT INTO `sys_role_menu` VALUES (2, 1047);
+INSERT INTO `sys_role_menu` VALUES (2, 1048);
+INSERT INTO `sys_role_menu` VALUES (2, 1049);
+INSERT INTO `sys_role_menu` VALUES (2, 1050);
+INSERT INTO `sys_role_menu` VALUES (2, 1051);
+INSERT INTO `sys_role_menu` VALUES (2, 1052);
+INSERT INTO `sys_role_menu` VALUES (2, 1053);
+INSERT INTO `sys_role_menu` VALUES (2, 1054);
+INSERT INTO `sys_role_menu` VALUES (2, 1055);
+INSERT INTO `sys_role_menu` VALUES (2, 1056);
+INSERT INTO `sys_role_menu` VALUES (2, 1057);
+INSERT INTO `sys_role_menu` VALUES (2, 1058);
+INSERT INTO `sys_role_menu` VALUES (2, 1059);
+INSERT INTO `sys_role_menu` VALUES (2, 1060);
+INSERT INTO `sys_role_menu` VALUES (100, 2000);
+INSERT INTO `sys_role_menu` VALUES (100, 2015);
+INSERT INTO `sys_role_menu` VALUES (100, 2017);
+INSERT INTO `sys_role_menu` VALUES (100, 2018);
+INSERT INTO `sys_role_menu` VALUES (100, 2019);
+INSERT INTO `sys_role_menu` VALUES (100, 2020);
+INSERT INTO `sys_role_menu` VALUES (100, 2021);
+INSERT INTO `sys_role_menu` VALUES (100, 2022);
+INSERT INTO `sys_role_menu` VALUES (100, 2023);
+INSERT INTO `sys_role_menu` VALUES (100, 2024);
+INSERT INTO `sys_role_menu` VALUES (100, 2025);
+INSERT INTO `sys_role_menu` VALUES (100, 2026);
+INSERT INTO `sys_role_menu` VALUES (100, 2027);
+
+-- ----------------------------
+-- Table structure for sys_user
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user`;
+CREATE TABLE `sys_user`  (
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `dept_id` bigint(20) NULL DEFAULT NULL COMMENT '部门ID',
+  `user_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户账号',
+  `nick_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户昵称',
+  `user_type` varchar(2) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '00' COMMENT '用户类型（00系统用户）',
+  `email` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '用户邮箱',
+  `phonenumber` varchar(11) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '手机号码',
+  `sex` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
+  `avatar` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '头像地址',
+  `password` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '密码',
+  `status` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '帐号状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `login_ip` varchar(128) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '最后登录IP',
+  `login_date` datetime NULL DEFAULT NULL COMMENT '最后登录时间',
+  `create_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`user_id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 102 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_user
+-- ----------------------------
+INSERT INTO `sys_user` VALUES (1, 103, 'admin', '若依', '00', 'ry@163.com', '15888888888', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '218.28.35.120', '2022-02-21 17:20:48', 'admin', '2022-02-06 00:58:11', '', '2022-02-21 17:20:47', '管理员');
+INSERT INTO `sys_user` VALUES (2, 105, 'ry', '若依', '00', 'ry@qq.com', '15666666666', '1', '', '$2a$10$7JB720yubVSZvUI0rEqK/.VqGOZTH.ulu33dHOiBE8ByOhJIrdAu2', '0', '0', '127.0.0.1', '2022-02-06 01:19:05', 'admin', '2022-02-06 00:58:11', '', '2022-02-06 01:19:05', '测试员');
+INSERT INTO `sys_user` VALUES (100, 100, 'cxw', 'cxw', '00', '', '15649865121', '0', '/profile/avatar/2022/02/06/eca0d060-761d-43e3-ab7b-b07e42f6c04e.jpeg', '$2a$10$GSwR8RplBd5Hsb/EaZ.pluhSvS/rqP37bdKtvUbJ/OPKBQFd6qq5O', '0', '0', '106.42.93.124', '2022-02-13 16:36:33', 'admin', '2022-02-06 01:41:15', '', '2022-02-13 16:36:32', NULL);
+INSERT INTO `sys_user` VALUES (101, 100, 'hww', 'hww', '00', '', '15690846023', '1', '', '$2a$10$QjvTR7rUjUzmdzfjEPW1HuyLeATpsaQEpm1G6HYMh8DeMUk3f0pju', '0', '0', '218.28.35.120', '2022-02-10 16:02:08', 'admin', '2022-02-06 01:41:40', '', '2022-02-10 16:02:08', NULL);
+
+-- ----------------------------
+-- Table structure for sys_user_post
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_post`;
+CREATE TABLE `sys_user_post`  (
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `post_id` bigint(20) NOT NULL COMMENT '岗位ID',
+  PRIMARY KEY (`user_id`, `post_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户与岗位关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_user_post
+-- ----------------------------
+INSERT INTO `sys_user_post` VALUES (1, 1);
+INSERT INTO `sys_user_post` VALUES (2, 2);
+INSERT INTO `sys_user_post` VALUES (100, 4);
+INSERT INTO `sys_user_post` VALUES (101, 4);
+
+-- ----------------------------
+-- Table structure for sys_user_role
+-- ----------------------------
+DROP TABLE IF EXISTS `sys_user_role`;
+CREATE TABLE `sys_user_role`  (
+  `user_id` bigint(20) NOT NULL COMMENT '用户ID',
+  `role_id` bigint(20) NOT NULL COMMENT '角色ID',
+  PRIMARY KEY (`user_id`, `role_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '用户和角色关联表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of sys_user_role
+-- ----------------------------
+INSERT INTO `sys_user_role` VALUES (1, 1);
+INSERT INTO `sys_user_role` VALUES (2, 2);
+INSERT INTO `sys_user_role` VALUES (100, 100);
+INSERT INTO `sys_user_role` VALUES (101, 100);
+
+SET FOREIGN_KEY_CHECKS = 1;
