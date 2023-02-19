@@ -93,17 +93,17 @@ VueAMap.initAMapApiLoader({
 import AFTableColumn from 'af-table-column'
 Vue.use(AFTableColumn)
 
-// 根据银行账号查询所属银行插件
-import getBankcardinfo from 'bankcardinfo'
-Vue.prototype.$getBankcardinfo = getBankcardinfo
-
 // mathjs精确计算插件
 import * as math from 'mathjs'
 Vue.prototype.$math = math
 
 // 时间格式化组件
 import moment from 'moment'
-Vue.prototype.$moment = moment;
+Vue.prototype.moment = moment;
+Vue.use(moment)
+
+// jquery组件
+Vue.prototype.jquery = $
 
 // 成功提示
 Vue.prototype.msgSuccess = function (msg) {
