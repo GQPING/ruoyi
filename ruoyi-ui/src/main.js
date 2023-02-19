@@ -23,7 +23,7 @@ import { parseTime, resetForm, addDateRange, selectDictLabel, selectDictLabels, 
 // 全局修改默认配置，点击空白处不能关闭弹窗
 // Element.Dialog.props.closeOnClickModal.default = false
 // 全局修改element默认配置
-Element.TableColumn.props.showOverflowTooltip = { type: Boolean, default: true }
+// Element.TableColumn.props.showOverflowTooltip = { type: Boolean, default: true }
 
 // 分页组件
 import Pagination from "@/components/Pagination";
